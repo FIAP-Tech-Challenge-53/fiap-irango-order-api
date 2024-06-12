@@ -1,0 +1,99 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: fiap-irango-ecr/${{ github.event.repository.name }}
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+  build:
+    name: Build Docker Image
+    needs: [lint]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      image_name_tag: ${{ steps.image_name.outputs.tag }}
+      image_name_latest: ${{ steps.image_name.outputs.latest }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          mask-aws-account-id: 'no'
+
+      - id: login_ecr
+        name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - id: get_branch
+        name: Extract branch name
+        run: |
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+      - id: image_name
+        name: Get image name
+        env:
+          IMAGE_TAG: ${{ steps.get_branch.outputs.branch }}_${{ github.sha }}
+        run: |
+          echo "tag=${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+          echo "latest=${{ env.ECR_REPOSITORY }}:latest" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        env:
+          BUNDLE_GITHUB__COM: ${{ secrets.BUNDLE_GITHUB__COM }}
+          DOCKERFILE_PATH: Dockerfile
+          IMAGE_URI_TAG: ${{ steps.login_ecr.outputs.registry }}/${{ steps.image_name.outputs.tag }}
+          IMAGE_URI_LATEST: ${{ steps.login_ecr.outputs.registry }}/${{ steps.image_name.outputs.latest }}
+        run: |
+          docker build \
+            --build-arg BUNDLE_GITHUB__COM=${BUNDLE_GITHUB__COM} \
+            -f ${DOCKERFILE_PATH} \
+            -t ${IMAGE_URI_TAG} \
+            -t ${IMAGE_URI_LATEST} \
+            .
+
+      - name: Push image to ECR
+        env:
+          IMAGE_REPOSITORY: ${{ steps.login_ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
+        run: |
+          docker push --all-tags ${{ env.IMAGE_REPOSITORY }}
+
+      - name: Trigger K8s Workflow
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          IMAGE_URI_LATEST: ${{ steps.login_ecr.outputs.registry }}/${{ steps.image_name.outputs.latest }}
+        uses: indiesdev/curl@v1.1
+        with:
+          url: https://api.github.com/repos/${{ github.repository_owner }}/fiap-irango-k8s/actions/workflows/release-api.yml/dispatches
+          method: POST
+          headers: '{"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"}'
+          bearer-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          body: '{"ref": "main", "inputs": {"image_uri": "${{ env.IMAGE_URI_LATEST }}"}}'
+          log-response: true
