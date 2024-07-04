@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
 
-import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
 
 import Pedido from '@/core/domain/entities/pedido'
 import IPaymentService from '@/core/domain/services/ipayment.service'
+import { Environment as envs } from '@/infra/web/nestjs/environment'
 
 @Injectable()
 export default class IRangoPaymentService implements IPaymentService {
@@ -11,9 +12,19 @@ export default class IRangoPaymentService implements IPaymentService {
   ) {}
 
   async registerOrder (pedido: Pedido): Promise<string> {
-    console.log(`Mocked Mercado Pago API: Register order for pedido ${pedido.id}`)
-    const pagamentoId = uuidv4() // mocked ID
-    console.log(`Pagamento ID: ${pagamentoId}`)
-    return pagamentoId
+    console.log(`Register order for pedido ${pedido.id} at IRango Payment Service`)
+
+    const url = `${envs.SERVICE_IRANGO_PAYMENT_API}/register-order`
+    try {
+      const response = await axios.post(url, pedido)
+
+      const pagamentoId = response.data.id
+      console.log(`Pagamento ID: ${pagamentoId}`)
+
+      return pagamentoId
+    } catch (error) {
+      console.log(`Error: ${error}`)
+      return 'null'
+    }
   }
 }

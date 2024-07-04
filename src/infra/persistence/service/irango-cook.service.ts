@@ -1,19 +1,24 @@
 import { Injectable } from '@nestjs/common'
 
-import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
 
 import Pedido from '@/core/domain/entities/pedido'
 import ICookService from '@/core/domain/services/icook.service'
+import { Environment as envs } from '@/infra/web/nestjs/environment'
 
 @Injectable()
 export default class IRangoCookService implements ICookService {
   constructor (
   ) {}
 
-  async registerOrder (pedido: Pedido): Promise<string> {
-    console.log(`Mocked Mercado Pago API: Register order for pedido ${pedido.id}`)
-    const pagamentoId = uuidv4() // mocked ID
-    console.log(`Pagamento ID: ${pagamentoId}`)
-    return pagamentoId
+  async registerOrder (pedido: Pedido): Promise<void> {
+    console.log(`Register order for pedido ${pedido.id} at IRango Cook Service`)
+
+    try {
+      const url = `${envs.SERVICE_IRANGO_COOK_API}/register-order`
+      await axios.post(url, pedido)
+    } catch (error) {
+      console.log(`Error: ${error}`)
+    }
   }
 }
