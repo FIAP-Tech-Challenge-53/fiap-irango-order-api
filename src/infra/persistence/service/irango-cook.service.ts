@@ -15,10 +15,11 @@ export default class IRangoCookService implements ICookService {
     console.log(`Register order for pedido ${pedido.id} at IRango Cook Service`)
 
     try {
-      const url = `${envs.SERVICE_IRANGO_COOK_API}/register-order`
+      const url = `${envs.SERVICE_IRANGO_COOK_API}/v1/pedidos/register`
       await axios.post(url, pedido)
     } catch (error) {
       console.log(`Error: ${error}`)
+      console.log(error.response?.data)
     }
   }
 }

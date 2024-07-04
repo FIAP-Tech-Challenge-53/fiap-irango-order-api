@@ -19,9 +19,12 @@
     "seed:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create",
     "seed:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/config/typeorm/TypeOrmSeedConfig.ts migration:run",
     "seed:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/config/typeorm/TypeOrmSeedConfig.ts migration:revert",
-    "test:integration:one": "jest $1 --config jest.config.integration.js --runInBand --logHeapUsage --detectOpenHandles",
-    "test:integration": "jest test/integration/features --config jest.config.integration.js --runInBand --logHeapUsage",
-    "test": "npm run test:integration"
+    "test:unit": "jest test/unit --config jest.config.unit.js",
+    "test:unit:one": "jest $1 --config jest.config.unit.js --logHeapUsage",
+    "test:coverage": "jest test/unit --config jest.config.unit.js --verbose --coverage",
+    "test:integration": "jest test/integration --config jest.config.integration.js --logHeapUsage --verbose --detectOpenHandles",
+    "test:integration:one": "jest $1 --config jest.config.integration.js --logHeapUsage --verbose --detectOpenHandles",
+    "test": "npm run test:unit"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.1.1",

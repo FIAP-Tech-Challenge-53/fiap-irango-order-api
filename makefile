@@ -7,7 +7,7 @@ CONTAINER_MYSQL = local-mysql
 CONTAINER_REDIS = local-redis
 CONTAINER_BACKEND = service-irango-order-api
 
-DATABASE = irango
+DATABASE = irango_order
 
 IMAGE ?= matob/irango-order-api
 
