@@ -34,8 +34,8 @@ export default class Create {
 
     pedido = await this.gateway.create(pedido)
 
-    const gatewayPagamentoId = await this.pagamentoGateway.registerOrder(pedido)
-    pedido.gatewayPagamentoId = gatewayPagamentoId
+    const pagamentoId = await this.pagamentoGateway.registerOrder(pedido)
+    pedido.pagamentoId = pagamentoId
 
     await this.gateway.save(pedido)
     return pedido
