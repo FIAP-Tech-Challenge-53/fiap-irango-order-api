@@ -29,16 +29,16 @@ add-network:
 
 .PHONY: build
 build:
-	docker-compose build --progress=plain
+	docker compose build --progress=plain
 .PHONY: up
-up:
-	docker-compose up --remove-orphans -d
+up: add-network create.env.file
+	docker compose up --remove-orphans -d
 .PHONY: down
 down:
-	docker-compose down
+	docker compose down
 .PHONY: logs
 logs:
-	docker-compose logs -f
+	docker compose logs -f
 restart: down up
 
 .PHONY:
@@ -53,25 +53,25 @@ migration.recreatedb:
 
 # make migration.generate name=create_table_pedido
 migration.generate:
-	docker-compose exec -it ${CONTAINER_BACKEND} npm run migration:generate src/infra/persistence/typeorm/migrations/$(name)
+	docker compose exec -it ${CONTAINER_BACKEND} npm run migration:generate src/infra/persistence/typeorm/migrations/$(name)
 migration.run:
-	docker-compose exec -it ${CONTAINER_BACKEND} npm run migration:run
+	docker compose exec -it ${CONTAINER_BACKEND} npm run migration:run
 migration.revert:
-	docker-compose exec -it ${CONTAINER_BACKEND} npm run migration:revert
+	docker compose exec -it ${CONTAINER_BACKEND} npm run migration:revert
 
 seed.generate:
-	docker-compose exec -it ${CONTAINER_BACKEND} npm run seed:generate src/infra/persistence/typeorm/seeds/$(name)
+	docker compose exec -it ${CONTAINER_BACKEND} npm run seed:generate src/infra/persistence/typeorm/seeds/$(name)
 seed.run:
-	docker-compose exec -it ${CONTAINER_BACKEND} npm run seed:run
+	docker compose exec -it ${CONTAINER_BACKEND} npm run seed:run
 seed.revert:
-	docker-compose exec -it ${CONTAINER_BACKEND} npm run seed:revert
+	docker compose exec -it ${CONTAINER_BACKEND} npm run seed:revert
 
 test: test.integration
 test.integration: test.integration.createdb
-	docker-compose exec -it ${CONTAINER_BACKEND} npm run test:integration
+	docker compose exec -it ${CONTAINER_BACKEND} npm run test:integration
 test.integration.createdb:
 	docker exec -it ${CONTAINER_MYSQL} mysql -uroot -ppassword -e "DROP DATABASE IF EXISTS ${DATABASE}_test; CREATE DATABASE ${DATABASE}_test;"
-	docker-compose exec -it ${CONTAINER_BACKEND} npm run migration:run:test
+	docker compose exec -it ${CONTAINER_BACKEND} npm run migration:run:test
 
 bash:
 	docker exec -it ${CONTAINER_BACKEND} /bin/bash
