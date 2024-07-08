@@ -46,10 +46,10 @@ make setup
 
 docker network create -d bridge local-network
 cp .env.example .env
-docker-compose build --progress=plain
-docker-compose up
-docker-compose exec -it service-irango-order-api npm run migration:run
-docker-compose exec -it service-irango-order-api npm run seed:run
+docker compose build --progress=plain
+docker compose up
+docker compose exec -it service-irango-order-api npm run migration:run
+docker compose exec -it service-irango-order-api npm run seed:run
 ```
 
 ## Start project using npm
@@ -107,13 +107,13 @@ make test.integration.createdb
 
 # or try without make
 docker exec -it ${CONTAINER_MYSQL} mysql -uroot -ppassword -e "DROP DATABASE IF EXISTS ${DATABASE}_test; CREATE DATABASE ${DATABASE}_test;"
-docker-compose exec -it ${CONTAINER_BACKEND} npm run migration:run:test
+docker compose exec -it ${CONTAINER_BACKEND} npm run migration:run:test
 ```
 
 ### Run all tests (We just have integrations for while)
 ```bash
 # With docker
-docker-compose run service-irango-order-api npm run test
+docker compose run service-irango-order-api npm run test
 
 # local
 npm run test
@@ -122,7 +122,7 @@ npm run test
 ### Run only integration tests
 ```bash
 # With docker
-docker-compose run service-irango-order-api npm run test:integration
+docker compose run service-irango-order-api npm run test:integration
 
 # local
 npm run test:integration
@@ -131,7 +131,7 @@ npm run test:integration
 ### Run a specifc test file
 ```bash
 # With docker
-docker-compose run service-irango-order-api npm run test:integration:one <FILE_NAME>
+docker compose run service-irango-order-api npm run test:integration:one <FILE_NAME>
 
 # local
 npm run test:integration:one <FILE_NAME>

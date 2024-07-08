@@ -13,7 +13,7 @@ export class Environment {
   }
 
   static get PORT () {
-    return process.env.PORT || 3000
+    return process.env.PORT || 3001
   }
 
   static get SENTRY_DSN () {
@@ -37,7 +37,7 @@ export class Environment {
   }
 
   static get DB_DATABASE () {
-    return process.env.DB_DATABASE || 'irango'
+    return process.env.DB_DATABASE || 'irango_order'
   }
 
   static get DB_CONNECTION_LIMIT (): number {
@@ -57,7 +57,7 @@ export class Environment {
   }
 
   static get REDIS_DB (): number {
-    return Number(process.env.REDIS_DB) || 0
+    return Number(process.env.REDIS_DB) || 1
   }
 
   static get REDIS_ENABLED (): boolean {
@@ -66,5 +66,15 @@ export class Environment {
 
   static get CACHE_ENABLED (): boolean {
     return process.env.CACHE_ENABLED === 'true'
+  }
+
+  // SERVICE_IRANGO_PAYMENT_API="http://127.0.0.1:3002"
+  static get SERVICE_IRANGO_PAYMENT_API () {
+    return process.env.SERVICE_IRANGO_PAYMENT_API || 'http://localhost:3002'
+  }
+
+  // SERVICE_IRANGO_COOK_API="http://127.0.0.1:3003"
+  static get SERVICE_IRANGO_COOK_API () {
+    return process.env.SERVICE_IRANGO_COOK_API || 'http://localhost:3003'
   }
 }
