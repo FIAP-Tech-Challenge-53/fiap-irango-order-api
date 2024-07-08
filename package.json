@@ -22,7 +22,7 @@
     "seed:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/config/typeorm/TypeOrmSeedConfig.ts migration:revert",
     "test:unit": "jest test/unit --config jest.config.unit.js",
     "test:unit:one": "jest $1 --config jest.config.unit.js --logHeapUsage",
-    "test:coverage": "jest test/unit --config jest.config.unit.js --verbose --coverage",
+    "test:coverage": "jest --runInBand --config jest.config.unit.js --verbose --coverage",
     "test:integration:local": "env-cmd -f .env.test jest  test/integration --config jest.config.integration.js --logHeapUsage --maxWorkers=1 --verbose --detectOpenHandles",
     "test:integration:local:one": "env-cmd -f .env.test jest $1 --config jest.config.integration.js --logHeapUsage --verbose --detectOpenHandles",
     "test": "npm run test:unit",
