@@ -4,6 +4,8 @@ import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
 import IPedidoRepository, {
   IPedidoRepository as IPedidoRepositorySymbol,
 } from '@/core/domain/repositories/ipedido.repository'
+import { IPaymentService } from '@/core/domain/services/ipayment.service'
+import IRangoPaymentService from '@/infra/persistence/service/irango-payment.service'
 import { Consumidor } from '@/infra/persistence/typeorm/entities/consumidor'
 import { Produto } from '@/infra/persistence/typeorm/entities/produto'
 import CreatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/create-pedido.request'
@@ -12,8 +14,6 @@ import PedidoResponse from '@/infra/web/nestjs/pedidos/dto/pedido.response'
 
 import IntegrationTestSetup, { ITestSetup } from '@/test/integration/setup/IntegrationTestSetup'
 import { Factory } from '@/test/integration/setup/utils/FactoryUtils'
-import IRangoPaymentService from '@/infra/persistence/service/irango-payment.service'
-import { IPaymentService } from '@/core/domain/services/ipayment.service'
 
 describe('Create Pedido Feature', () => {
   describe('POST /v1/pedidos', () => {
@@ -22,13 +22,11 @@ describe('Create Pedido Feature', () => {
     let pedidoRepository: IPedidoRepository
     let paymentService: IRangoPaymentService
 
-
     beforeAll(async () => {
       setup = await IntegrationTestSetup.getInstance()
       produtoFactory = setup.factory.produtoFactory()
       pedidoRepository = setup.app.get<IPedidoRepository>(IPedidoRepositorySymbol)
       paymentService = setup.app.get<IRangoPaymentService>(IPaymentService)
-
     })
 
     describe('when everything is valid', () => {
@@ -110,7 +108,7 @@ describe('Create Pedido Feature', () => {
           // Arrange
           const requestBody = buildRequestBody(consumidor)
           const expectedResponse = buildExpectedResponse(consumidor)
-          jest.spyOn(paymentService, 'registerOrder').mockResolvedValueOnce(crypto.randomUUID());
+          jest.spyOn(paymentService, 'registerOrder').mockResolvedValueOnce(crypto.randomUUID())
 
           // Act & Assert
           await actAndAssert(requestBody, expectedResponse as PedidoResponse)
@@ -123,7 +121,7 @@ describe('Create Pedido Feature', () => {
           // Arrange
           const requestBody = buildRequestBody()
           const expectedResponse = buildExpectedResponse()
-          jest.spyOn(paymentService, 'registerOrder').mockResolvedValueOnce(crypto.randomUUID());
+          jest.spyOn(paymentService, 'registerOrder').mockResolvedValueOnce(crypto.randomUUID())
 
           // Act & Assert
           await actAndAssert(requestBody, expectedResponse as PedidoResponse)
