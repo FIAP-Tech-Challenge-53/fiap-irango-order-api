@@ -2,20 +2,18 @@
 
 import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { agent } from 'supertest'
 
+import { IPaymentService } from '@/core/domain/services/ipayment.service'
 import AllExceptionFilter from '@/core/helpers/AllExceptionFilter'
 import ResponseTransformInterceptor from '@/core/helpers/ResponseTransformInterceptor'
+import IRangoPaymentService from '@/infra/persistence/service/irango-payment.service'
 import AppModule, { appModules } from '@/infra/web/nestjs/app.module'
 
-import TypeOrmTestConfig from '@/test/integration/setup/database/TypeOrmTestConfig'
 import FactoryUtils from '@/test/integration/setup/utils/FactoryUtils'
 import { ServerUtils } from '@/test/integration/setup/utils/ServerUtils'
 import { TestDatabaseUtils } from '@/test/integration/setup/utils/TestDatabaseUtils'
-import { IPaymentService } from '@/core/domain/services/ipayment.service'
-import IRangoPaymentService from '@/infra/persistence/service/irango-payment.service'
 
 export interface ITestSetup {
   app: INestApplication
@@ -25,7 +23,7 @@ export interface ITestSetup {
   server: ServerUtils
 }
 
-const paymentService: Partial<IRangoPaymentService> = { registerOrder: jest.fn() };
+const paymentService: Partial<IRangoPaymentService> = { registerOrder: jest.fn() }
 
 const buildNestApp = async () => {
   const module = await Test.createTestingModule({
@@ -39,9 +37,9 @@ const buildNestApp = async () => {
       FactoryUtils
     ]
   })
-  .overrideProvider(IPaymentService)
-  .useValue(paymentService)
-  .compile()
+    .overrideProvider(IPaymentService)
+    .useValue(paymentService)
+    .compile()
 
   module.useLogger({
     log (): any {},
