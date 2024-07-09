@@ -68,7 +68,7 @@ jobs:
       # Test bdd
       - name: Test BDD
         run: npm run test:bdd
-        
+
       - name: Notify CI process
         if: always()
         uses: appleboy/discord-action@master
