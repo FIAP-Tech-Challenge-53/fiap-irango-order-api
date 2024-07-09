@@ -23,7 +23,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: irango_order
+          MYSQL_DATABASE: irango_order_test
           MYSQL_ROOT_HOST: '%'
         # options: >-
         #   --health-cmd pg_isready
