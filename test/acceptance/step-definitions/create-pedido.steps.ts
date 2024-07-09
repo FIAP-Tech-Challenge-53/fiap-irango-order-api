@@ -30,18 +30,18 @@ Before(async () => {
 })
 
 AfterAll(async () => {
-  const setup = await IntegrationTestSetup.getInstance()
+  setup = await IntegrationTestSetup.getInstance()
   await setup.db.truncateAll()
   await setup.module.close()
   await setup.app.close()
 })
 
 After(async () => {
-  const setup = await IntegrationTestSetup.getInstance()
+  setup = await IntegrationTestSetup.getInstance()
   await setup.db.truncateAll()
 })
 
-const buildRequestBody = (consumidor?: Consumidor) => {
+const buildRequestBody = (consu?: Consumidor) => {
   const itens = produtos
     .map((produto: Produto) => {
       const ingredientesCount = faker.number.int({ min: 0, max: produto.ingredientes.length })
@@ -54,7 +54,7 @@ const buildRequestBody = (consumidor?: Consumidor) => {
     })
 
   const requestBody: CreatePedidoRequest = {
-    consumidorId: consumidor?.id,
+    consumidorId: consu?.id,
     itens
   }
 
