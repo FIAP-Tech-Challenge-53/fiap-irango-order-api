@@ -59,13 +59,14 @@ jobs:
       - name: Test integration
         run: npm run test:integration --bail
       # Test bdd
-      - name: Test Bdd
+      - name: Test BDD
         run: npm run test:bdd
-
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+      - name: Set custom environment variable DB_DATABASE
+        run: echo "DB_DATABASE=irango_order_test" >> $GITHUB_ENV
+      - id: get_branch
+        name: Extract branch name
+        run: |
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         
       - name: Notify CI process
         if: always()
@@ -73,4 +74,4 @@ jobs:
         with:
           webhook_id: '${{ secrets.WEBHOOK_ID }}'
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          message: CI of branch ${{ steps.extract_branch.outputs.branch }} executed ${{ job.status }}.
+          message: CI of branch ${{ steps.get_branch.outputs.branch }} executed ${{ job.status }}.
