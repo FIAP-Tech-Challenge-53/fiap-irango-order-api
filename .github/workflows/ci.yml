@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - feat/ci
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: irango_order
+          MYSQL_ROOT_HOST: '%'
+        # options: >-
+        #   --health-cmd pg_isready
+        #   --health-interval 10s
+        #   --health-timeout 5s
+        #   --health-retries 5
+      redis:
+        image: redis:7.2.3
+        ports:
+          - 6379:6379
+    steps:
+      # Check out the source
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      # Setup node.js and cache
+      - name: 'Setup node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION ?? '20.10.0' }} 
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+      # Lint App
+      - name: Lint App
+        run: npm run lint:ci
+      # Build App
+      - name: Build App
+        run: npm run build
+      - name: Test
+        run: npm test
+      - name: Test integration
+        run: npm run test:integration

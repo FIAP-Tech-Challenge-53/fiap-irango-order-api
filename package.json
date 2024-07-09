@@ -12,6 +12,7 @@
     "start:debug": "nest start --debug --watch --entryFile=/infra/web/nestjs/main.js",
     "start:prod": "node dist/infra/web/nestjs/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint:ci": "eslint \"{src,apps,libs,test}/**/*.ts\" --format=stylish",
     "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/config/typeorm/TypeOrmMigrationConfig.ts migration:generate",
     "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/config/typeorm/TypeOrmMigrationConfig.ts migration:run",
     "migration:run:test": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource test/integration/setup/database/TypeOrmTestMigrationConfig.ts migration:run",
