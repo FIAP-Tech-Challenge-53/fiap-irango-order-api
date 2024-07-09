@@ -56,7 +56,7 @@ jobs:
         run: npm run build
       - name: Test
         run: npm test
-      # - name: Migration
-      #   run: npm run migration:run
+      - name: Migration
+        run: npm run migration:run
       - name: Test integration
         run: npm run test:integration --bail
