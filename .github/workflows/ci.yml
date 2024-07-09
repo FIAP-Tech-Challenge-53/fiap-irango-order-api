@@ -52,6 +52,8 @@ jobs:
       # Test Unit
       - name: Test
         run: npm test
+      - name: Set custom environment variable DB_DATABASE
+        run: echo "DB_DATABASE=irango_order_test" >> $GITHUB_ENV
       # Run Migration
       - name: Migration
         run: npm run migration:run
@@ -61,8 +63,6 @@ jobs:
       # Test bdd
       - name: Test BDD
         run: npm run test:bdd
-      - name: Set custom environment variable DB_DATABASE
-        run: echo "DB_DATABASE=irango_order_test" >> $GITHUB_ENV
       - id: get_branch
         name: Extract branch name
         run: |
