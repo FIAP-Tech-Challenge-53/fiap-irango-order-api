@@ -58,6 +58,9 @@ jobs:
       # Test Integration
       - name: Test integration
         run: npm run test:integration --bail
+      # Test bdd
+      - name: Test Bdd
+        run: npm run test:bdd
 
       - name: Extract branch name
         shell: bash

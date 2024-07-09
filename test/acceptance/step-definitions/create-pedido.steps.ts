@@ -1,21 +1,22 @@
 
-import { faker } from '@faker-js/faker';
-import { When, Then, Given,After, AfterAll, Before, BeforeAll } from "@cucumber/cucumber";
-import * as assert from "assert";
+import { When, Then, Given, After, AfterAll, Before, BeforeAll } from '@cucumber/cucumber'
+import { faker } from '@faker-js/faker'
+import * as assert from 'assert'
 
-import IntegrationTestSetup, { ITestSetup } from '../../integration/setup/IntegrationTestSetup';
-import Consumidor from '@/core/domain/entities/consumidor';
+import Consumidor from '@/core/domain/entities/consumidor'
+import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
 import { Produto } from '@/infra/persistence/typeorm/entities/produto'
-import CreatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/create-pedido.request';
-import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum';
+import CreatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/create-pedido.request'
+
 // import ItemPedidoResponse from '@/infra/web/nestjs/pedidos/dto/item-pedido.response';
-import { Factory } from '@/test/integration/setup/utils/FactoryUtils';
+import { Factory } from '@/test/integration/setup/utils/FactoryUtils'
+
+import IntegrationTestSetup, { ITestSetup } from '../../integration/setup/IntegrationTestSetup'
 
 let setup: ITestSetup
-let consumidor: Consumidor
+let consumidor: Consumidor | undefined
 let produtoFactory: Factory<Produto>
 let produtos: Produto[]
-
 
 BeforeAll(async () => {
   setup = await IntegrationTestSetup.getInstance()
@@ -39,7 +40,6 @@ After(async () => {
   const setup = await IntegrationTestSetup.getInstance()
   await setup.db.truncateAll()
 })
-
 
 const buildRequestBody = (consumidor?: Consumidor) => {
   const itens = produtos
@@ -84,30 +84,32 @@ const buildRequestBody = (consumidor?: Consumidor) => {
 //   return consumidor ? { ...expectedResponse, consumidorId: consumidor.id } : expectedResponse
 // }
 
-var response: any
+let response: any
 
 Given('que sou consumidor identificado', async function () {
-    consumidor = await setup.factory.consumidor()
+  consumidor = await setup.factory.consumidor()
+})
 
-  });
+Given('que sou consumidor não identificado', function () {
+  consumidor = undefined
+})
 
-  When('criar um pedido', async function () {
-    const requestBody = buildRequestBody(consumidor)
+When('criar um pedido', async function () {
+  const requestBody = buildRequestBody(consumidor)
 
-    response = await setup.server
+  response = await setup.server
     .request('/v1/pedidos')
     .post(requestBody)
+})
 
-  });
+Then('o pedido é criado com sucesso', function () {
+  // const expectedResponse = buildExpectedResponse(consumidor)
 
-  Then('o pedido é criado com sucesso', function () {
-    // const expectedResponse = buildExpectedResponse(consumidor)
+  // expect(response.status).toBe(201)
+  assert.equal(response.status, 201)
 
-    // expect(response.status).toBe(201)
-    assert.equal(response.status, 201)
+  // const itens = (response.body.data.itens as ItemPedidoResponse[]).sort((a, b) => a.produtoId.localeCompare(b.produtoId))
 
-    // const itens = (response.body.data.itens as ItemPedidoResponse[]).sort((a, b) => a.produtoId.localeCompare(b.produtoId))
-  
-    assert.equal(response.body.data.status, PedidoStatusEnum.PAGAMENTO_PENDENTE)
-    // expect({ ...response.body.data, itens }).toMatchObject(expectedResponse)
-  });
+  assert.equal(response.body.data.status, PedidoStatusEnum.PAGAMENTO_PENDENTE)
+  // expect({ ...response.body.data, itens }).toMatchObject(expectedResponse)
+})

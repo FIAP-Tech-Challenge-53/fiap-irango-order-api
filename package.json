@@ -88,7 +88,7 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
     "@babel/register": "^7.17.7",
-    "babel-jest": "^27.5.1",
+    "babel-jest": "^29.0.0",
     "babel-plugin-jest-hoist": "^27.5.1",
     "source-map-support": "^0.5.21",
     "sqlite3": "^5.1.7",
