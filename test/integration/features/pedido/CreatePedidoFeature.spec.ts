@@ -1,4 +1,5 @@
 import { fakerPT_BR as faker } from '@faker-js/faker'
+import { v4 as uuidv4 } from 'uuid';
 
 import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
 import IPedidoRepository, {
@@ -108,7 +109,7 @@ describe('Create Pedido Feature', () => {
           // Arrange
           const requestBody = buildRequestBody(consumidor)
           const expectedResponse = buildExpectedResponse(consumidor)
-          jest.spyOn(paymentService, 'registerOrder').mockResolvedValueOnce(crypto.randomUUID())
+          jest.spyOn(paymentService, 'registerOrder').mockResolvedValueOnce(uuidv4())
 
           // Act & Assert
           await actAndAssert(requestBody, expectedResponse as PedidoResponse)
@@ -121,7 +122,7 @@ describe('Create Pedido Feature', () => {
           // Arrange
           const requestBody = buildRequestBody()
           const expectedResponse = buildExpectedResponse()
-          jest.spyOn(paymentService, 'registerOrder').mockResolvedValueOnce(crypto.randomUUID())
+          jest.spyOn(paymentService, 'registerOrder').mockResolvedValueOnce(uuidv4())
 
           // Act & Assert
           await actAndAssert(requestBody, expectedResponse as PedidoResponse)
