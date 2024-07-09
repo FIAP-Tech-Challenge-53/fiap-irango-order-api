@@ -14,6 +14,8 @@ import TypeOrmTestConfig from '@/test/integration/setup/database/TypeOrmTestConf
 import FactoryUtils from '@/test/integration/setup/utils/FactoryUtils'
 import { ServerUtils } from '@/test/integration/setup/utils/ServerUtils'
 import { TestDatabaseUtils } from '@/test/integration/setup/utils/TestDatabaseUtils'
+import { IPaymentService } from '@/core/domain/services/ipayment.service'
+import IRangoPaymentService from '@/infra/persistence/service/irango-payment.service'
 
 export interface ITestSetup {
   app: INestApplication
@@ -23,19 +25,23 @@ export interface ITestSetup {
   server: ServerUtils
 }
 
+const paymentService: Partial<IRangoPaymentService> = { registerOrder: jest.fn() };
+
 const buildNestApp = async () => {
   const module = await Test.createTestingModule({
     imports: [
-      TypeOrmModule.forRoot(TypeOrmTestConfig),
-
       ...appModules,
       AppModule,
+      // TypeOrmModule.forRoot(TypeOrmTestConfig),
     ],
     providers: [
       TestDatabaseUtils,
       FactoryUtils
     ]
-  }).compile()
+  })
+  .overrideProvider(IPaymentService)
+  .useValue(paymentService)
+  .compile()
 
   module.useLogger({
     log (): any {},
