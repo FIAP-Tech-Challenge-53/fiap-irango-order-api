@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - feat/ci
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  pipeline-ci:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: irango_order_test
+          MYSQL_ROOT_HOST: '%'
+      redis:
+        image: redis:7.2.3
+        ports:
+          - 6379:6379
+    steps:
+      # Check out the source
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      # Setup node.js and cache
+      - name: 'Setup node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }} 
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json
+      # Install dependencies
+
+      - id: get_branch
+        name: Extract branch name
+        run: |
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      - name: Install dependencies
+        run: npm ci
+      # Lint App
+      - name: Lint App
+        run: npm run lint:ci
+      # Build App
+      - name: Build App
+        run: npm run build
+      # Test Unit
+      - name: Test
+        run: npm test
+      - name: Set custom environment variable DB_DATABASE
+        run: echo "DB_DATABASE=irango_order_test" >> $GITHUB_ENV
+      # Run Migration
+      - name: Migration
+        run: npm run migration:run
+      # Test Integration
+      - name: Test integration
+        run: npm run test:integration --bail
+      # Test bdd
+      - name: Test BDD
+        run: npm run test:bdd
+
+      - name: Notify CI process
+        if: always()
+        uses: appleboy/discord-action@master
+        with:
+          color: "#48f442"
+          webhook_id: '${{ secrets.WEBHOOK_ID }}'
+          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
+          message: CI of branch ${{ steps.get_branch.outputs.branch }} executed ${{ job.status }}.

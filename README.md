@@ -46,6 +46,7 @@ make setup
 
 docker network create -d bridge local-network
 cp .env.example .env
+cp .env.local.test.example .env.test
 docker compose build --progress=plain
 docker compose up
 docker compose exec -it service-irango-order-api npm run migration:run
@@ -119,22 +120,23 @@ docker compose run service-irango-order-api npm run test
 npm run test
 ```
 
-### Run only integration tests
+### Run only integration tests local
 ```bash
 # With docker
 docker compose run service-irango-order-api npm run test:integration
 
 # local
-npm run test:integration
+npm run test:integration:local
 ```
 
-### Run a specifc test file
+### Run a specifc test file local
 ```bash
 # With docker
 docker compose run service-irango-order-api npm run test:integration:one <FILE_NAME>
 
 # local
-npm run test:integration:one <FILE_NAME>
+npm run test:integration:local:one <FILE_NAME>
+
 ```
 
 ## Make commands
