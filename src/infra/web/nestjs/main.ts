@@ -35,7 +35,9 @@ const configureSwagger = (app: INestApplication) => {
     .build()
 
   const document = SwaggerModule.createDocument(app, swaggerOptions)
-  SwaggerModule.setup('docs', app, document)
+   SwaggerModule.setup('docs', app, document, {
+    jsonDocumentUrl: 'docs/json'
+  })
 }
 
 async function bootstrap () {

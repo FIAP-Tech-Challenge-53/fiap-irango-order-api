@@ -12,24 +12,8 @@ env:
   ECR_REPOSITORY: fiap-irango-ecr/${{ github.event.repository.name }}
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Lint
-        run: npm run lint
-
   build:
     name: Build Docker Image
-    needs: [lint]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -97,3 +81,21 @@ jobs:
           bearer-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           body: '{"ref": "main", "inputs": {"image_uri": "${{ env.IMAGE_URI_LATEST }}"}}'
           log-response: true
+
+      - name: Send Message Build Success 
+        if: success()
+        uses: appleboy/discord-action@master
+        with:
+          color: "#48f442"
+          webhook_id: ${{ secrets.WEBHOOK_ID }}
+          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
+          message: "Docker Build Success!"
+
+      - name: Send Message Build Failure
+        if: failure()
+        uses: appleboy/discord-action@master
+        with:
+          color: "#f44254"
+          webhook_id: ${{ secrets.WEBHOOK_ID }}
+          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
+          message: "Docker Build Failure!"

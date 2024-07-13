@@ -12,11 +12,16 @@ DATABASE = irango_order
 IMAGE ?= matob/irango-order-api
 
 .PHONY: setup
-setup: clean down add-network create.env.file build up migration.run seed.run logs
+setup: clean down add-network create.env.file create.env.test.file build up migration.run seed.run logs
 
 create.env.file:
 	if [ ! -f .env ]; then \
 		cp .env.example .env; \
+	fi
+
+create.env.test.file:
+	if [ ! -f .env.test ]; then \
+		cp .env.local.test.example .env.test; \
 	fi
 
 .PHONY: add-network
