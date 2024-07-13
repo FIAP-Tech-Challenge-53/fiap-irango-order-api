@@ -1,77 +1,75 @@
-import FindById from '@/core/application/usecase/pedido/findById.use-case';
+import FindById from '@/core/application/usecase/pedido/findById.use-case'
+import Consumidor from '@/core/domain/entities/consumidor'
 import Pedido from '@/core/domain/entities/pedido'
+import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
 import BusinessException from '@/core/domain/errors/business-exception'
+import IPedidoRepository from '@/core/domain/repositories/ipedido.repository'
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
-import IPedidoRepository from "@/core/domain/repositories/ipedido.repository";
-import Consumidor from '@/core/domain/entities/consumidor';
-import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum';
 
-describe("FindById Class Tests", () => {
+describe('FindById Class Tests', () => {
+  let mockPedidoGateway:PedidoGateway
+  let useCase:FindById
+  let mockPedidoRepository:jest.Mocked<IPedidoRepository>
 
-    let mockPedidoGateway:PedidoGateway;
-    let useCase:FindById;
-    let mockPedidoRepository:jest.Mocked<IPedidoRepository>;
+  let mockCreate:jest.Mock<any>
+  let mockfindById:jest.Mock<any>
+  let mockList:jest.Mock<any>
+  let mocksave:jest.Mock<any>
 
-    let mockCreate:jest.Mock<any>;
-    let mockfindById:jest.Mock<any>;
-    let mockList:jest.Mock<any>;
-    let mocksave:jest.Mock<any>;
+  beforeEach(() => {
+    jest.mock('@/core/operation/gateway/pedido.gateway')
 
-    beforeEach(() => {
+    mockCreate = jest.fn()
+    mockfindById = jest.fn()
+    mockList = jest.fn()
+    mocksave = jest.fn()
 
-        jest.mock('@/core/operation/gateway/pedido.gateway');
+    PedidoGateway.prototype.create = mockCreate
+    PedidoGateway.prototype.findById = mockfindById
+    PedidoGateway.prototype.list = mockList
+    PedidoGateway.prototype.save = mocksave
 
-        mockCreate = jest.fn();
-        mockfindById = jest.fn();
-        mockList = jest.fn();
-        mocksave = jest.fn();
-    
-        PedidoGateway.prototype.create = mockCreate;
-        PedidoGateway.prototype.findById = mockfindById;
-        PedidoGateway.prototype.list = mockList;
-        PedidoGateway.prototype.save = mocksave;
+    mockPedidoRepository = {
+      find: jest.fn(),
+      findById: jest.fn(),
+      create: jest.fn(),
+      save: jest.fn()
+    }
 
-        mockPedidoRepository = {
-            find: jest.fn(),
-            findById: jest.fn(),
-            create: jest.fn(),
-            save: jest.fn()
-        }
+    mockPedidoGateway = new PedidoGateway(mockPedidoRepository)
+    useCase = new FindById(mockPedidoGateway)
+  })
 
-        mockPedidoGateway = new PedidoGateway(mockPedidoRepository);
-        useCase = new FindById(mockPedidoGateway);
-    });
+  it('constructor class test', async () => {
+    expect(useCase).toBeInstanceOf(FindById)
+  })
 
-    it("constructor class test", async () => {
-        expect(useCase).toBeInstanceOf(FindById);
-    });
-    
-    it("test handle method using not available pedido", async () => {
-        mockfindById.mockResolvedValue(undefined);
-        await expect(useCase.handle(1)).rejects.toThrow(new BusinessException('Pedido não encontrado'));
-    });
+  it('test handle method using not available pedido', async () => {
+    mockfindById.mockResolvedValue(undefined)
+    await expect(useCase.handle(1)).rejects.toThrow(new BusinessException('Pedido não encontrado'))
+  })
 
-    it("test handle method using available pedido", async () => {
-        let consumidor = Consumidor.create("Test", "26055706571", "test@test.com");
-        
-        let pedido = new Pedido({
-            id: 1,
-            consumidorId: '1',
-            consumidor: consumidor,
-            itens: [],
-            total: 1,
-            status: PedidoStatusEnum.PREPARACAO,
-            pagamentoId: '',
-            createdAt: new Date(1),
-            updatedAt: new Date(1)
-        });
-        
-        mockfindById.mockResolvedValue(pedido);
-        
-        let result = await useCase.handle(1);
+  it('test handle method using available pedido', async () => {
+    const consumidor = Consumidor.create('Test', '26055706571', 'test@test.com')
 
-        expect(mockfindById).toHaveBeenCalledTimes(1);
-        expect(mockfindById).toHaveBeenCalledWith(1);
-        expect(result).toEqual(pedido);
-    });
-});
+    const pedido = new Pedido({
+      id: 1,
+      consumidorId: '1',
+      consumidor,
+      itens: [],
+      total: 1,
+      status: PedidoStatusEnum.PREPARACAO,
+      pagamentoId: '',
+      createdAt: new Date(1),
+      updatedAt: new Date(1)
+    })
+
+    mockfindById.mockResolvedValue(pedido)
+
+    const result = await useCase.handle(1)
+
+    expect(mockfindById).toHaveBeenCalledTimes(1)
+    expect(mockfindById).toHaveBeenCalledWith(1)
+    expect(result).toEqual(pedido)
+  })
+})

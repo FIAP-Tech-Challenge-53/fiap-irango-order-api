@@ -2,301 +2,299 @@ import ProdutoUseCase from '@/core/application/usecase/produto/produto.use-case'
 import ProdutoCreateDto from '@/core/domain/dto/input/produto-create.dto'
 import ProdutoUpdateDto from '@/core/domain/dto/input/produto-update.dto'
 import ProdutoDto from '@/core/domain/dto/output/produto.dto'
+import Produto from '@/core/domain/entities/produto'
 import { ProdutoCategoriaEnum } from '@/core/domain/enums/produto-categoria.enum'
 import ProdutoMapper from '@/core/domain/mappers/produto.mapper'
 import IProdutoRepository from '@/core/domain/repositories/iproduto.repository'
-import { ProdutoGateway } from '@/core/operation/gateway/produto.gateway'
 import { ProdutoController } from '@/core/operation/controllers/produto.controller'
-import Produto from '@/core/domain/entities/produto'
+import { ProdutoGateway } from '@/core/operation/gateway/produto.gateway'
 
-describe("Test for ProdutoController Class", () => {
+describe('Test for ProdutoController Class', () => {
+  let controller:ProdutoController
 
-    let controller:ProdutoController;
+  let mockRepository:jest.Mocked<IProdutoRepository>
 
-    let mockRepository:jest.Mocked<IProdutoRepository>;
+  let mockGatewayCreate:jest.Mock<any>
+  let mockGatewayfindById:jest.Mock<any>
+  let mockGatewayfindByCategoria:jest.Mock<any>
+  let mockGatewaysave:jest.Mock<any>
+  let mockGatewayfind:jest.Mock<any>
 
-    let mockGatewayCreate:jest.Mock<any>;
-    let mockGatewayfindById:jest.Mock<any>;
-    let mockGatewayfindByCategoria:jest.Mock<any>;
-    let mockGatewaysave:jest.Mock<any>;
-    let mockGatewayfind:jest.Mock<any>;
+  let mockUseCaseCreate:jest.Mock<any>
+  let mockUseCasefindById:jest.Mock<any>
+  let mockUseCasefindByCategoria:jest.Mock<any>
+  let mockUseCaseList:jest.Mock<any>
+  let mockUseCaseUpdate:jest.Mock<any>
+  let mockUseCaseRemove:jest.Mock<any>
 
-    let mockUseCaseCreate:jest.Mock<any>;
-    let mockUseCasefindById:jest.Mock<any>;
-    let mockUseCasefindByCategoria:jest.Mock<any>;
-    let mockUseCaseList:jest.Mock<any>;
-    let mockUseCaseUpdate:jest.Mock<any>;
-    let mockUseCaseRemove:jest.Mock<any>;
+  let mockToDto:jest.Mock<any>
+  let mockToDomainEntity:jest.Mock<any>
 
-    let mockToDto:jest.Mock<any>;
-    let mockToDomainEntity:jest.Mock<any>;
+  beforeEach(() => {
+    jest.mock('@/core/operation/gateway/produto.gateway')
+    jest.mock('@/core/application/usecase/produto/produto.use-case')
 
-    beforeEach(() => {
+    mockGatewayCreate = jest.fn()
+    mockGatewayfindById = jest.fn()
+    mockGatewayfindByCategoria = jest.fn()
+    mockGatewaysave = jest.fn()
+    mockGatewayfind = jest.fn()
 
-        jest.mock("@/core/operation/gateway/produto.gateway");
-        jest.mock("@/core/application/usecase/produto/produto.use-case");
+    mockUseCaseCreate = jest.fn()
+    mockUseCasefindById = jest.fn()
+    mockUseCasefindByCategoria = jest.fn()
+    mockUseCaseList = jest.fn()
+    mockUseCaseUpdate = jest.fn()
+    mockUseCaseRemove = jest.fn()
 
-        mockGatewayCreate = jest.fn();
-        mockGatewayfindById = jest.fn();
-        mockGatewayfindByCategoria = jest.fn();
-        mockGatewaysave = jest.fn();
-        mockGatewayfind = jest.fn();
+    mockToDto = jest.fn()
+    mockToDomainEntity = jest.fn()
 
-        mockUseCaseCreate = jest.fn();
-        mockUseCasefindById = jest.fn();
-        mockUseCasefindByCategoria = jest.fn();
-        mockUseCaseList = jest.fn();
-        mockUseCaseUpdate = jest.fn();
-        mockUseCaseRemove = jest.fn();
+    ProdutoGateway.prototype.create = mockGatewayCreate
+    ProdutoGateway.prototype.findById = mockGatewayfindById
+    ProdutoGateway.prototype.findByCategoria = mockGatewayfindByCategoria
+    ProdutoGateway.prototype.save = mockGatewaysave
+    ProdutoGateway.prototype.find = mockGatewayfind
 
-        mockToDto = jest.fn();
-        mockToDomainEntity = jest.fn();
-    
-        ProdutoGateway.prototype.create = mockGatewayCreate;
-        ProdutoGateway.prototype.findById = mockGatewayfindById;
-        ProdutoGateway.prototype.findByCategoria = mockGatewayfindByCategoria;
-        ProdutoGateway.prototype.save = mockGatewaysave;
-        ProdutoGateway.prototype.find = mockGatewayfind;
+    ProdutoUseCase.prototype.create = mockUseCaseCreate
+    ProdutoUseCase.prototype.findById = mockUseCasefindById
+    ProdutoUseCase.prototype.findByCategoria = mockUseCasefindByCategoria
+    ProdutoUseCase.prototype.list = mockUseCaseList
+    ProdutoUseCase.prototype.update = mockUseCaseUpdate
+    ProdutoUseCase.prototype.remove = mockUseCaseRemove
 
-        ProdutoUseCase.prototype.create = mockUseCaseCreate;
-        ProdutoUseCase.prototype.findById = mockUseCasefindById;
-        ProdutoUseCase.prototype.findByCategoria = mockUseCasefindByCategoria;
-        ProdutoUseCase.prototype.list = mockUseCaseList;
-        ProdutoUseCase.prototype.update = mockUseCaseUpdate;
-        ProdutoUseCase.prototype.remove = mockUseCaseRemove;
+    ProdutoMapper.toDto = mockToDto
+    ProdutoMapper.toDomainEntity = mockToDomainEntity
 
-        ProdutoMapper.toDto = mockToDto;
-        ProdutoMapper.toDomainEntity = mockToDomainEntity;
-        
-        mockRepository = {
-            create: jest.fn(),
-            findById: jest.fn(),
-            findByCategoria: jest.fn(),
-            save: jest.fn(),
-            find: jest.fn()
-        };
+    mockRepository = {
+      create: jest.fn(),
+      findById: jest.fn(),
+      findByCategoria: jest.fn(),
+      save: jest.fn(),
+      find: jest.fn()
+    }
 
-        controller = new ProdutoController(mockRepository);
-    });
+    controller = new ProdutoController(mockRepository)
+  })
 
-    it("constructor class test", async () => {
-        expect(controller).toBeInstanceOf(ProdutoController);
-    });
+  it('constructor class test', async () => {
+    expect(controller).toBeInstanceOf(ProdutoController)
+  })
 
-    it("create method test", async () => {
-        const createDto: ProdutoCreateDto = {
-            nome: 'Name',
-            imagemUrl: 'imagemUrl',
-            descricao: 'Description',
-            preco: 1,
-            categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-            ingredientes: []
-        };
+  it('create method test', async () => {
+    const createDto: ProdutoCreateDto = {
+      nome: 'Name',
+      imagemUrl: 'imagemUrl',
+      descricao: 'Description',
+      preco: 1,
+      categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
+      ingredientes: []
+    }
 
-        const dto: ProdutoDto = {
-            id: '1',
-            nome: 'Name',
-            descricao: 'Description',
-            preco: 1,
-            imagemUrl: 'imagemUrl',
-            categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-            ingredientes: [],
-            deletedAt: new Date(1)
-        };
+    const dto: ProdutoDto = {
+      id: '1',
+      nome: 'Name',
+      descricao: 'Description',
+      preco: 1,
+      imagemUrl: 'imagemUrl',
+      categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
+      ingredientes: [],
+      deletedAt: new Date(1)
+    }
 
-        const produto:Produto = Produto.create(
-            'Name',
-            'Description',
-            'imagemUrl',
-            1,
-            ProdutoCategoriaEnum.ACOMPANHAMENTO
-        );
+    const produto:Produto = Produto.create(
+      'Name',
+      'Description',
+      'imagemUrl',
+      1,
+      ProdutoCategoriaEnum.ACOMPANHAMENTO
+    )
 
-        mockUseCaseCreate.mockResolvedValue(produto);
-        mockToDto.mockResolvedValue(dto);
+    mockUseCaseCreate.mockResolvedValue(produto)
+    mockToDto.mockResolvedValue(dto)
 
-        let result = await controller.create(createDto);
+    const result = await controller.create(createDto)
 
-        expect(mockUseCaseCreate).toHaveBeenCalledTimes(1);
-        expect(mockToDto).toHaveBeenCalledTimes(1);
+    expect(mockUseCaseCreate).toHaveBeenCalledTimes(1)
+    expect(mockToDto).toHaveBeenCalledTimes(1)
 
-        expect(mockUseCaseCreate).toHaveBeenCalledWith(createDto);
-        expect(mockToDto).toHaveBeenCalledWith(produto);
-        
-        expect(result).toEqual(dto);
-    });
+    expect(mockUseCaseCreate).toHaveBeenCalledWith(createDto)
+    expect(mockToDto).toHaveBeenCalledWith(produto)
 
-    it("update method test", async () => {
-        const updateDto: ProdutoUpdateDto = {
-            id: '1',
-            nome: 'Name',
-            imagemUrl: 'imagemUrl',
-            descricao: 'Description',
-            preco: 1,
-            categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-            ingredientes: []
-        };
+    expect(result).toEqual(dto)
+  })
 
-        const dto: ProdutoDto = {
-            id: '1',
-            nome: 'Name',
-            descricao: 'Description',
-            preco: 1,
-            imagemUrl: 'imagemUrl',
-            categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-            ingredientes: [],
-            deletedAt: new Date(1)
-        };
+  it('update method test', async () => {
+    const updateDto: ProdutoUpdateDto = {
+      id: '1',
+      nome: 'Name',
+      imagemUrl: 'imagemUrl',
+      descricao: 'Description',
+      preco: 1,
+      categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
+      ingredientes: []
+    }
 
-        const produto:Produto = Produto.create(
-            'Name',
-            'Description',
-            'imagemUrl',
-            1,
-            ProdutoCategoriaEnum.ACOMPANHAMENTO
-        );
+    const dto: ProdutoDto = {
+      id: '1',
+      nome: 'Name',
+      descricao: 'Description',
+      preco: 1,
+      imagemUrl: 'imagemUrl',
+      categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
+      ingredientes: [],
+      deletedAt: new Date(1)
+    }
 
-        mockUseCaseUpdate.mockResolvedValue(produto);
-        mockToDto.mockResolvedValue(dto);
+    const produto:Produto = Produto.create(
+      'Name',
+      'Description',
+      'imagemUrl',
+      1,
+      ProdutoCategoriaEnum.ACOMPANHAMENTO
+    )
 
-        let result = await controller.update(updateDto);
+    mockUseCaseUpdate.mockResolvedValue(produto)
+    mockToDto.mockResolvedValue(dto)
 
-        expect(mockUseCaseUpdate).toHaveBeenCalledTimes(1);
-        expect(mockToDto).toHaveBeenCalledTimes(1);
+    const result = await controller.update(updateDto)
 
-        expect(mockUseCaseUpdate).toHaveBeenCalledWith(updateDto);
-        expect(mockToDto).toHaveBeenCalledWith(produto);
-        
-        expect(result).toEqual(dto);
-    });
+    expect(mockUseCaseUpdate).toHaveBeenCalledTimes(1)
+    expect(mockToDto).toHaveBeenCalledTimes(1)
 
-    it("list method test", async () => {
-        const dto: ProdutoDto = {
-            id: '1',
-            nome: 'Name',
-            descricao: 'Description',
-            preco: 1,
-            imagemUrl: 'imagemUrl',
-            categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-            ingredientes: [],
-            deletedAt: new Date(1)
-        };
+    expect(mockUseCaseUpdate).toHaveBeenCalledWith(updateDto)
+    expect(mockToDto).toHaveBeenCalledWith(produto)
 
-        const produto:Produto = Produto.create(
-            'Name',
-            'Description',
-            'imagemUrl',
-            1,
-            ProdutoCategoriaEnum.ACOMPANHAMENTO
-        );
+    expect(result).toEqual(dto)
+  })
 
-        mockUseCaseList.mockResolvedValue([produto]);
-        mockToDto.mockResolvedValue(dto);
+  it('list method test', async () => {
+    const dto: ProdutoDto = {
+      id: '1',
+      nome: 'Name',
+      descricao: 'Description',
+      preco: 1,
+      imagemUrl: 'imagemUrl',
+      categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
+      ingredientes: [],
+      deletedAt: new Date(1)
+    }
 
-        await controller.list();
+    const produto:Produto = Produto.create(
+      'Name',
+      'Description',
+      'imagemUrl',
+      1,
+      ProdutoCategoriaEnum.ACOMPANHAMENTO
+    )
 
-        expect(mockUseCaseList).toHaveBeenCalledTimes(1);
-        expect(mockToDto).toHaveBeenCalledTimes(1);
-        expect(mockToDto).toHaveBeenCalledWith(produto);
-    });
+    mockUseCaseList.mockResolvedValue([produto])
+    mockToDto.mockResolvedValue(dto)
 
-    it("findById method test", async () => {
-        const dto: ProdutoDto = {
-            id: '1',
-            nome: 'Name',
-            descricao: 'Description',
-            preco: 1,
-            imagemUrl: 'imagemUrl',
-            categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-            ingredientes: [],
-            deletedAt: new Date(1)
-        };
+    await controller.list()
 
-        const produto:Produto = Produto.create(
-            'Name',
-            'Description',
-            'imagemUrl',
-            1,
-            ProdutoCategoriaEnum.ACOMPANHAMENTO
-        );
+    expect(mockUseCaseList).toHaveBeenCalledTimes(1)
+    expect(mockToDto).toHaveBeenCalledTimes(1)
+    expect(mockToDto).toHaveBeenCalledWith(produto)
+  })
 
-        mockUseCasefindById.mockResolvedValue(produto);
-        mockToDto.mockResolvedValue(dto);
+  it('findById method test', async () => {
+    const dto: ProdutoDto = {
+      id: '1',
+      nome: 'Name',
+      descricao: 'Description',
+      preco: 1,
+      imagemUrl: 'imagemUrl',
+      categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
+      ingredientes: [],
+      deletedAt: new Date(1)
+    }
 
-        let result = await controller.findById("1");
+    const produto:Produto = Produto.create(
+      'Name',
+      'Description',
+      'imagemUrl',
+      1,
+      ProdutoCategoriaEnum.ACOMPANHAMENTO
+    )
 
-        expect(mockUseCasefindById).toHaveBeenCalledTimes(1);
-        expect(mockToDto).toHaveBeenCalledTimes(1);
+    mockUseCasefindById.mockResolvedValue(produto)
+    mockToDto.mockResolvedValue(dto)
 
-        expect(mockUseCasefindById).toHaveBeenCalledWith("1");
-        expect(mockToDto).toHaveBeenCalledWith(produto);
-        
-        expect(result).toEqual(dto);
-    });
+    const result = await controller.findById('1')
 
-    it("findByCategoria method test", async () => {
-        const dto: ProdutoDto = {
-            id: '1',
-            nome: 'Name',
-            descricao: 'Description',
-            preco: 1,
-            imagemUrl: 'imagemUrl',
-            categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-            ingredientes: [],
-            deletedAt: new Date(1)
-        };
+    expect(mockUseCasefindById).toHaveBeenCalledTimes(1)
+    expect(mockToDto).toHaveBeenCalledTimes(1)
 
-        const produto:Produto = Produto.create(
-            'Name',
-            'Description',
-            'imagemUrl',
-            1,
-            ProdutoCategoriaEnum.ACOMPANHAMENTO
-        );
+    expect(mockUseCasefindById).toHaveBeenCalledWith('1')
+    expect(mockToDto).toHaveBeenCalledWith(produto)
 
-        mockUseCasefindByCategoria.mockResolvedValue([produto]);
-        mockToDto.mockResolvedValue(dto);
+    expect(result).toEqual(dto)
+  })
 
-        await controller.findByCategoria(ProdutoCategoriaEnum.ACOMPANHAMENTO);
+  it('findByCategoria method test', async () => {
+    const dto: ProdutoDto = {
+      id: '1',
+      nome: 'Name',
+      descricao: 'Description',
+      preco: 1,
+      imagemUrl: 'imagemUrl',
+      categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
+      ingredientes: [],
+      deletedAt: new Date(1)
+    }
 
-        expect(mockUseCasefindByCategoria).toHaveBeenCalledTimes(1);
-        expect(mockToDto).toHaveBeenCalledTimes(1);
+    const produto:Produto = Produto.create(
+      'Name',
+      'Description',
+      'imagemUrl',
+      1,
+      ProdutoCategoriaEnum.ACOMPANHAMENTO
+    )
 
-        expect(mockUseCasefindByCategoria).toHaveBeenCalledWith(ProdutoCategoriaEnum.ACOMPANHAMENTO);
-        expect(mockToDto).toHaveBeenCalledWith(produto);
-    });
+    mockUseCasefindByCategoria.mockResolvedValue([produto])
+    mockToDto.mockResolvedValue(dto)
 
-    it("remove method test", async () => {
-        const dto: ProdutoDto = {
-            id: '1',
-            nome: 'Name',
-            descricao: 'Description',
-            preco: 1,
-            imagemUrl: 'imagemUrl',
-            categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-            ingredientes: [],
-            deletedAt: new Date(1)
-        };
+    await controller.findByCategoria(ProdutoCategoriaEnum.ACOMPANHAMENTO)
 
-        const produto:Produto = Produto.create(
-            'Name',
-            'Description',
-            'imagemUrl',
-            1,
-            ProdutoCategoriaEnum.ACOMPANHAMENTO
-        );
+    expect(mockUseCasefindByCategoria).toHaveBeenCalledTimes(1)
+    expect(mockToDto).toHaveBeenCalledTimes(1)
 
-        mockUseCaseRemove.mockResolvedValue(produto);
-        mockToDto.mockResolvedValue(dto);
+    expect(mockUseCasefindByCategoria).toHaveBeenCalledWith(ProdutoCategoriaEnum.ACOMPANHAMENTO)
+    expect(mockToDto).toHaveBeenCalledWith(produto)
+  })
 
-        let result = await controller.remove("1");
+  it('remove method test', async () => {
+    const dto: ProdutoDto = {
+      id: '1',
+      nome: 'Name',
+      descricao: 'Description',
+      preco: 1,
+      imagemUrl: 'imagemUrl',
+      categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
+      ingredientes: [],
+      deletedAt: new Date(1)
+    }
 
-        expect(mockUseCaseRemove).toHaveBeenCalledTimes(1);
-        expect(mockToDto).toHaveBeenCalledTimes(1);
+    const produto:Produto = Produto.create(
+      'Name',
+      'Description',
+      'imagemUrl',
+      1,
+      ProdutoCategoriaEnum.ACOMPANHAMENTO
+    )
 
-        expect(mockUseCaseRemove).toHaveBeenCalledWith("1");
-        expect(mockToDto).toHaveBeenCalledWith(produto);
-        
-        expect(result).toEqual(dto);
-    });
-});
+    mockUseCaseRemove.mockResolvedValue(produto)
+    mockToDto.mockResolvedValue(dto)
+
+    const result = await controller.remove('1')
+
+    expect(mockUseCaseRemove).toHaveBeenCalledTimes(1)
+    expect(mockToDto).toHaveBeenCalledTimes(1)
+
+    expect(mockUseCaseRemove).toHaveBeenCalledWith('1')
+    expect(mockToDto).toHaveBeenCalledWith(produto)
+
+    expect(result).toEqual(dto)
+  })
+})

@@ -1,196 +1,187 @@
-import ConsumidorTypeormRepository from "@/infra/persistence/typeorm/repository/consumidor-typeorm.repository";
 import { Repository } from 'typeorm'
+
+import ConsumidorDto from '@/core/domain/dto/output/consumidor.dto'
 import Consumidor from '@/core/domain/entities/consumidor'
-import ConsumidorDto from "@/core/domain/dto/output/consumidor.dto";
 import BusinessException from '@/core/domain/errors/business-exception'
 import ConsumidorMapper from '@/core/domain/mappers/consumidor.mapper'
 import Cpf from '@/core/domain/value-object/Cpf'
 import { Consumidor as Entity } from '@/infra/persistence/typeorm/entities/consumidor'
+import ConsumidorTypeormRepository from '@/infra/persistence/typeorm/repository/consumidor-typeorm.repository'
 
-describe("ConsumidorTypeormRepository Class Tests", () => {
+describe('ConsumidorTypeormRepository Class Tests', () => {
+  let consumerRepository:ConsumidorTypeormRepository
 
-    let consumerRepository:ConsumidorTypeormRepository;
+  let repository:jest.Mocked<Repository<Entity>>
 
-    let repository:jest.Mocked<Repository<Entity>>;
+  let mockToDto:jest.Mock<any>
+  let toDomainEntity:jest.Mock<any>
 
-    let mockToDto:jest.Mock<any>;
-    let toDomainEntity:jest.Mock<any>;
+  beforeEach(() => {
+    mockToDto = jest.fn()
+    toDomainEntity = jest.fn()
 
-    beforeEach(() => {
+    repository = {
+      insert: jest.fn(),
+      findOneBy: jest.fn(),
+      update: jest.fn(),
+      find: jest.fn()
+    } as unknown as jest.Mocked<Repository<Entity>>
 
-        mockToDto = jest.fn();
-        toDomainEntity = jest.fn();
+    ConsumidorMapper.toDto = mockToDto
+    ConsumidorMapper.toDomainEntity = toDomainEntity
 
-        repository = {
-            insert: jest.fn(),
-            findOneBy: jest.fn(),
-            update: jest.fn(),
-            find: jest.fn()
-        } as unknown as jest.Mocked<Repository<Entity>>;
+    consumerRepository = new ConsumidorTypeormRepository(repository)
+  })
 
-        ConsumidorMapper.toDto = mockToDto;
-        ConsumidorMapper.toDomainEntity = toDomainEntity;
- 
-        consumerRepository = new ConsumidorTypeormRepository(repository);
-    });
+  it('constructtor class test', async () => {
+    expect(consumerRepository).toBeInstanceOf(ConsumidorTypeormRepository)
+  })
 
-    it("constructtor class test", async () => {
-        expect(consumerRepository).toBeInstanceOf(ConsumidorTypeormRepository);
-    });
+  it('create method class test', async () => {
+    const dto: ConsumidorDto = {
+      id: '1',
+      nome: 'Test',
+      cpf: '27117957999',
+      email: 'test@test.com'
+    }
 
-    it("create method class test", async () => {
+    const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com')
 
-        const dto: ConsumidorDto = {
-            id: '1',
-            nome: 'Test',
-            cpf: '27117957999',
-            email: 'test@test.com'
-        };
+    mockToDto.mockResolvedValue(dto)
 
-        const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com');
+    const result = await consumerRepository.create(consumidor)
 
-        mockToDto.mockResolvedValue(dto);
+    expect(mockToDto).toHaveBeenCalledTimes(1)
+    expect(repository.insert).toHaveBeenCalledTimes(1)
+    expect(mockToDto).toHaveBeenCalledWith(consumidor)
 
-        let result = await consumerRepository.create(consumidor);
-        
-        expect(mockToDto).toHaveBeenCalledTimes(1);
-        expect(repository.insert).toHaveBeenCalledTimes(1);
-        expect(mockToDto).toHaveBeenCalledWith(consumidor);
-        
-        expect(result).toEqual(consumidor);
-    });
+    expect(result).toEqual(consumidor)
+  })
 
-    it("findById method class test using registered customer", async () => {
+  it('findById method class test using registered customer', async () => {
+    const dto: ConsumidorDto = {
+      id: '1',
+      nome: 'Test',
+      cpf: '27117957999',
+      email: 'test@test.com'
+    }
 
-        const dto: ConsumidorDto = {
-            id: '1',
-            nome: 'Test',
-            cpf: '27117957999',
-            email: 'test@test.com'
-        };
+    const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com')
 
-        const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com');
+    toDomainEntity.mockResolvedValue(consumidor)
+    repository.findOneBy.mockResolvedValue(dto)
 
-        toDomainEntity.mockResolvedValue(consumidor);
-        repository.findOneBy.mockResolvedValue(dto);
+    const result = await consumerRepository.findById('1')
 
-        let result = await consumerRepository.findById("1");
-        
-        expect(toDomainEntity).toHaveBeenCalledTimes(1);
-        expect(repository.findOneBy).toHaveBeenCalledTimes(1);
+    expect(toDomainEntity).toHaveBeenCalledTimes(1)
+    expect(repository.findOneBy).toHaveBeenCalledTimes(1)
 
-        expect(repository.findOneBy).toHaveBeenCalledWith({id: "1"});
-        expect(toDomainEntity).toHaveBeenCalledWith(dto);
-        
-        expect(result).toEqual(consumidor);
-    });
+    expect(repository.findOneBy).toHaveBeenCalledWith({ id: '1' })
+    expect(toDomainEntity).toHaveBeenCalledWith(dto)
 
-    it("findById method class test using unregistered customer", async () => {
+    expect(result).toEqual(consumidor)
+  })
 
-        repository.findOneBy.mockResolvedValue(null);
+  it('findById method class test using unregistered customer', async () => {
+    repository.findOneBy.mockResolvedValue(null)
 
-        let result = await consumerRepository.findById("1");
-        
-        expect(toDomainEntity).toHaveBeenCalledTimes(0);
-        expect(repository.findOneBy).toHaveBeenCalledTimes(1);
+    const result = await consumerRepository.findById('1')
 
-        expect(repository.findOneBy).toHaveBeenCalledWith({id: "1"});
-        expect(result).toEqual(undefined);
-    });
+    expect(toDomainEntity).toHaveBeenCalledTimes(0)
+    expect(repository.findOneBy).toHaveBeenCalledTimes(1)
 
-    it("save method class test using registered customer", async () => {
-        const dto: ConsumidorDto = {
-            id: '1',
-            nome: 'Test',
-            cpf: '27117957999',
-            email: 'test@test.com'
-        };
+    expect(repository.findOneBy).toHaveBeenCalledWith({ id: '1' })
+    expect(result).toEqual(undefined)
+  })
 
-        const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com');
+  it('save method class test using registered customer', async () => {
+    const dto: ConsumidorDto = {
+      id: '1',
+      nome: 'Test',
+      cpf: '27117957999',
+      email: 'test@test.com'
+    }
 
-        mockToDto.mockResolvedValue(dto);
-        toDomainEntity.mockResolvedValue(consumidor);
-        repository.findOneBy.mockResolvedValue(dto);
+    const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com')
 
-        let result = await consumerRepository.save(consumidor);
-        
-        expect(mockToDto).toHaveBeenCalledTimes(1);
-        expect(toDomainEntity).toHaveBeenCalledTimes(1);
-        expect(repository.findOneBy).toHaveBeenCalledTimes(1);
-        expect(repository.update).toHaveBeenCalledTimes(1);
+    mockToDto.mockResolvedValue(dto)
+    toDomainEntity.mockResolvedValue(consumidor)
+    repository.findOneBy.mockResolvedValue(dto)
 
-        expect(repository.findOneBy).toHaveBeenCalledWith({id: consumidor.id});
-        expect(mockToDto).toHaveBeenCalledWith(consumidor);
-        
-        expect(result).toEqual(consumidor);
-    });
+    const result = await consumerRepository.save(consumidor)
 
-    it("save method class test using unregistered customer", async () => {
+    expect(mockToDto).toHaveBeenCalledTimes(1)
+    expect(toDomainEntity).toHaveBeenCalledTimes(1)
+    expect(repository.findOneBy).toHaveBeenCalledTimes(1)
+    expect(repository.update).toHaveBeenCalledTimes(1)
 
-        const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com');
+    expect(repository.findOneBy).toHaveBeenCalledWith({ id: consumidor.id })
+    expect(mockToDto).toHaveBeenCalledWith(consumidor)
 
-        repository.findOneBy.mockResolvedValue(null);
+    expect(result).toEqual(consumidor)
+  })
 
-        await expect(consumerRepository.save(consumidor)).rejects.toThrow(new BusinessException('Consumidor não encontrado'));
-    });
+  it('save method class test using unregistered customer', async () => {
+    const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com')
 
-    it("find method class", async () => {
-        const dto: ConsumidorDto = {
-            id: '1',
-            nome: 'Test',
-            cpf: '27117957999',
-            email: 'test@test.com'
-        };
+    repository.findOneBy.mockResolvedValue(null)
 
-        const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com');
+    await expect(consumerRepository.save(consumidor)).rejects.toThrow(new BusinessException('Consumidor não encontrado'))
+  })
 
-        toDomainEntity.mockResolvedValue([consumidor]);
-        repository.find.mockResolvedValue([dto]);
+  it('find method class', async () => {
+    const dto: ConsumidorDto = {
+      id: '1',
+      nome: 'Test',
+      cpf: '27117957999',
+      email: 'test@test.com'
+    }
 
-        await consumerRepository.find();
-        
-        expect(toDomainEntity).toHaveBeenCalledTimes(1);
-        expect(repository.find).toHaveBeenCalledTimes(1);
-        expect(toDomainEntity).toHaveBeenCalledWith(dto);
+    const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com')
 
-    });
+    toDomainEntity.mockResolvedValue([consumidor])
+    repository.find.mockResolvedValue([dto])
 
-    it("findByCPF method class using registered cpf", async () => {
-        const cpf = new Cpf("27117957999");
+    await consumerRepository.find()
 
-        const dto: ConsumidorDto = {
-            id: '1',
-            nome: 'Test',
-            cpf: '27117957999',
-            email: 'test@test.com'
-        };
+    expect(toDomainEntity).toHaveBeenCalledTimes(1)
+    expect(repository.find).toHaveBeenCalledTimes(1)
+    expect(toDomainEntity).toHaveBeenCalledWith(dto)
+  })
 
-        const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com');
+  it('findByCPF method class using registered cpf', async () => {
+    const cpf = new Cpf('27117957999')
 
-        toDomainEntity.mockResolvedValue(consumidor);
-        repository.findOneBy.mockResolvedValue(dto);
+    const dto: ConsumidorDto = {
+      id: '1',
+      nome: 'Test',
+      cpf: '27117957999',
+      email: 'test@test.com'
+    }
 
-        let result = await consumerRepository.findByCPF(cpf);
-        
-        expect(toDomainEntity).toHaveBeenCalledTimes(1);
-        expect(repository.findOneBy).toHaveBeenCalledTimes(1);
-        expect(toDomainEntity).toHaveBeenCalledWith(dto);
-        expect(repository.findOneBy).toHaveBeenCalledWith({cpf: cpf.toString()});
-        expect(result).toEqual(consumidor);
-    });
+    const consumidor:Consumidor = Consumidor.create('Test', '27117957999', 'test@test.com')
 
-    it("findByCPF method class using unregistered cpf", async () => {
+    toDomainEntity.mockResolvedValue(consumidor)
+    repository.findOneBy.mockResolvedValue(dto)
 
-        const cpf = new Cpf("27117957999");
+    const result = await consumerRepository.findByCPF(cpf)
 
-        repository.findOneBy.mockResolvedValue(null);
+    expect(toDomainEntity).toHaveBeenCalledTimes(1)
+    expect(repository.findOneBy).toHaveBeenCalledTimes(1)
+    expect(toDomainEntity).toHaveBeenCalledWith(dto)
+    expect(repository.findOneBy).toHaveBeenCalledWith({ cpf: cpf.toString() })
+    expect(result).toEqual(consumidor)
+  })
 
-        let result = await consumerRepository.findByCPF(cpf);
+  it('findByCPF method class using unregistered cpf', async () => {
+    const cpf = new Cpf('27117957999')
 
-        expect(repository.findOneBy).toHaveBeenCalledTimes(1);
-        expect(repository.findOneBy).toHaveBeenCalledWith({cpf: cpf.toString()});
-        expect(result).toEqual(undefined);
-        
-    });
+    repository.findOneBy.mockResolvedValue(null)
 
-}); 
+    const result = await consumerRepository.findByCPF(cpf)
+
+    expect(repository.findOneBy).toHaveBeenCalledTimes(1)
+    expect(repository.findOneBy).toHaveBeenCalledWith({ cpf: cpf.toString() })
+    expect(result).toEqual(undefined)
+  })
+})

@@ -1,34 +1,32 @@
-import { PaymentGateway } from "@/core/operation/gateway/payment.gateway";
-import IPaymentService from "@/core/domain/services/ipayment.service";
-import Pedido from "@/core/domain/entities/pedido";
+import Pedido from '@/core/domain/entities/pedido'
+import IPaymentService from '@/core/domain/services/ipayment.service'
+import { PaymentGateway } from '@/core/operation/gateway/payment.gateway'
 
-describe("Test PaymentGateway class", () => {
+describe('Test PaymentGateway class', () => {
+  let gateway: PaymentGateway
+  let mockedPaymentService: jest.Mocked<IPaymentService>
 
-    let gateway: PaymentGateway;
-    let mockedPaymentService: jest.Mocked<IPaymentService>;
+  beforeEach(() => {
+    mockedPaymentService = {
+      registerOrder: jest.fn()
+    }
 
-    beforeEach(() => {
+    gateway = new PaymentGateway(mockedPaymentService)
+  })
 
-        mockedPaymentService = {
-            registerOrder: jest.fn()
-        };
+  it('Testing class constructor', () => {
+    expect(gateway).toBeInstanceOf(PaymentGateway)
+  })
 
-        gateway = new PaymentGateway(mockedPaymentService);
-    });
+  it('Test registerOrder method', async () => {
+    const pedido = new Pedido()
 
-    it("Testing class constructor", () => {
-        expect(gateway).toBeInstanceOf(PaymentGateway);
-    });
+    mockedPaymentService.registerOrder.mockResolvedValue('mocked-result')
 
-    it("Test registerOrder method", async () => {
-        const pedido = new Pedido();
+    const result = await gateway.registerOrder(pedido)
 
-        mockedPaymentService.registerOrder.mockResolvedValue("mocked-result");
-
-        let result = await gateway.registerOrder(pedido);
-
-        expect(mockedPaymentService.registerOrder).toHaveBeenCalledWith(pedido);
-        expect(mockedPaymentService.registerOrder).toHaveBeenCalledTimes(1);
-        expect(result).toEqual("mocked-result");
-    });
-});
+    expect(mockedPaymentService.registerOrder).toHaveBeenCalledWith(pedido)
+    expect(mockedPaymentService.registerOrder).toHaveBeenCalledTimes(1)
+    expect(result).toEqual('mocked-result')
+  })
+})
