@@ -49,8 +49,8 @@ cp .env.example .env
 cp .env.local.test.example .env.test
 docker compose build --progress=plain
 docker compose up
-docker compose exec -it service-irango-order-api npm run migration:run
-docker compose exec -it service-irango-order-api npm run seed:run
+docker compose exec -it irangoorder-api npm run migration:run
+docker compose exec -it irangoorder-api npm run seed:run
 ```
 
 ## Start project using npm
@@ -114,7 +114,7 @@ docker compose exec -it ${CONTAINER_BACKEND} npm run migration:run:test
 ### Run all tests (We just have integrations for while)
 ```bash
 # With docker
-docker compose run service-irango-order-api npm run test
+docker compose run irangoorder-api npm run test
 
 # local
 npm run test
@@ -123,7 +123,7 @@ npm run test
 ### Run only integration tests local
 ```bash
 # With docker
-docker compose run service-irango-order-api npm run test:integration
+docker compose run irangoorder-api npm run test:integration
 
 # local
 npm run test:integration:local
@@ -132,7 +132,7 @@ npm run test:integration:local
 ### Run a specifc test file local
 ```bash
 # With docker
-docker compose run service-irango-order-api npm run test:integration:one <FILE_NAME>
+docker compose run irangoorder-api npm run test:integration:one <FILE_NAME>
 
 # local
 npm run test:integration:local:one <FILE_NAME>
