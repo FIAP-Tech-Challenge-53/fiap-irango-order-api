@@ -102,42 +102,18 @@ We developed few endpoints which can be found in [consumidores.controller.ts](./
 > GET {irango_host}/v1/pedidos
 
 ## Automated Tests
-We developed integration tests which can be run using docker or in directly in local machine (in this case you need change the `DB_HOSTNAME` env to `localhost`). Before run the tests, we need to create the test database using:
+### Run all tests
 ```bash
-make test.integration.createdb
-
-# or try without make
-docker exec -it ${CONTAINER_MYSQL} mysql -uroot -ppassword -e "DROP DATABASE IF EXISTS ${DATABASE}_test; CREATE DATABASE ${DATABASE}_test;"
-docker compose exec -it ${CONTAINER_BACKEND} npm run migration:run:test
-```
-
-### Run all tests (We just have integrations for while)
-```bash
-# With docker
-docker compose run irangoorder-api npm run test
-
-# local
 npm run test
 ```
 
-### Run only integration tests local
+### Test Coverage
 ```bash
-# With docker
-docker compose run irangoorder-api npm run test:integration
-
-# local
-npm run test:integration:local
+npm run test:coverage
 ```
 
-### Run a specifc test file local
-```bash
-# With docker
-docker compose run irangoorder-api npm run test:integration:one <FILE_NAME>
+<img src="./docs/test_suite.png" alt="Test Suite Coverage" width="900" />
 
-# local
-npm run test:integration:local:one <FILE_NAME>
-
-```
 
 ## Make commands
 ### Using Docker
