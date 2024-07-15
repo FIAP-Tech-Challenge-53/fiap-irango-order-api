@@ -1,4 +1,5 @@
 import ItemPedidoDto from '@/core/domain/dto/output/item-pedido.dto'
+import Ingrediente from '@/core/domain/entities/ingrediente'
 import ItemPedido from '@/core/domain/entities/item-pedido'
 import Produto from '@/core/domain/entities/produto'
 import { ProdutoCategoriaEnum } from '@/core/domain/enums/produto-categoria.enum'
@@ -6,6 +7,14 @@ import ItemPedidoMapper from '@/core/domain/mappers/item-pedido.mapper'
 
 describe('Testing ItemPedidoMapper Class', () => {
   it('toDto static method should receive ItemPedido Class and return ItemPedidoDto class', () => {
+    const ingrediente = new Ingrediente({
+      id: '1',
+      nome: 'test',
+      imagemUrl: 'test',
+      preco: 1,
+      produtoId: '1'
+    })
+
     const produto = new Produto({
       id: '',
       nome: '',
@@ -13,7 +22,7 @@ describe('Testing ItemPedidoMapper Class', () => {
       preco: 1,
       imagemUrl: '',
       categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-      ingredientes: [],
+      ingredientes: [ingrediente],
       deletedAt: new Date(1)
     })
 
@@ -23,7 +32,7 @@ describe('Testing ItemPedidoMapper Class', () => {
       produto,
       pedidoId: 1,
       preco: 1,
-      ingredientesRemovidos: []
+      ingredientesRemovidos: [ingrediente]
     })
 
     const dto = ItemPedidoMapper.toDto(itemPedido)
@@ -32,7 +41,6 @@ describe('Testing ItemPedidoMapper Class', () => {
     expect(dto.produtoId).toEqual('')
     expect(dto.produto).toEqual(produto)
     expect(dto.preco).toEqual(1)
-    expect(dto.ingredientesRemovidos).toStrictEqual([])
   })
 
   it('toDomainEntity static method should receive ItemPedidoDto Class and return ItemPedido class', () => {

@@ -1,10 +1,10 @@
 import Create from '@/core/application/usecase/pedido/create.use-case'
-// import { ItemPedidoCreateDto } from '@/core/domain/dto/input/pedido-create.dto'
-// import Ingrediente from '@/core/domain/entities/ingrediente'
-// import ItemPedido from '@/core/domain/entities/item-pedido'
-// import Pedido from '@/core/domain/entities/pedido'
-// import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
-// import BusinessException from '@/core/domain/errors/business-exception'
+import Consumidor from '@/core/domain/entities/consumidor'
+import Pedido from '@/core/domain/entities/pedido'
+import Produto from '@/core/domain/entities/produto'
+import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
+import { ProdutoCategoriaEnum } from '@/core/domain/enums/produto-categoria.enum'
+import BusinessException from '@/core/domain/errors/business-exception'
 import IConsumidorRepository from '@/core/domain/repositories/iconsumidor.repository'
 import IPedidoRepository from '@/core/domain/repositories/ipedido.repository'
 import IProdutoRepository from '@/core/domain/repositories/iproduto.repository'
@@ -13,7 +13,7 @@ import { ConsumidorGateway } from '@/core/operation/gateway/consumidor.gateway'
 import { PaymentGateway } from '@/core/operation/gateway/payment.gateway'
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
 import { ProdutoGateway } from '@/core/operation/gateway/produto.gateway'
-// import CreatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/create-pedido.request'
+import CreatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/create-pedido.request'
 
 describe('Create Class Tests', () => {
   let mockPedidoGateway:PedidoGateway
@@ -134,21 +134,51 @@ describe('Create Class Tests', () => {
   it('constructor class test', async () => {
     expect(useCase).toBeInstanceOf(Create)
   })
-/*
+
   it('test handle method using a input with an id', async () => {
-    // const input = new CreatePedidoRequest();
+    const itemRemovido = {
+      produtoId: '1',
+      ingredientesRemovidos: ['item']
+    }
 
-  })
+    const input:CreatePedidoRequest = {
+      consumidorId: '1',
+      itens: [itemRemovido]
+    }
+    const consumidor = Consumidor.create('nome', '57965568438', 'test@test.com')
+    const pedido = Pedido.create(consumidor, [], PedidoStatusEnum.PAGAMENTO_PENDENTE)
+    const produto = Produto.create('nome', 'descrição', 'imageUrl', 1, ProdutoCategoriaEnum.BEBIDA)
+    mockConsumidorFindById.mockResolvedValue(consumidor)
+    mockProdutoFindById.mockResolvedValue(produto)
+    mockPedidoCreate.mockResolvedValue(pedido)
+    mockPaymentRegisterOrder.mockResolvedValue('1')
 
-  it('test handle method using a input without an id', async () => {
+    const result = await useCase.handle(input)
 
+    expect(mockConsumidorFindById).toHaveBeenCalledTimes(1)
+    expect(mockPedidoCreate).toHaveBeenCalledTimes(1)
+    expect(mockPaymentRegisterOrder).toHaveBeenCalledTimes(1)
+    expect(mockPedidoSave).toHaveBeenCalledTimes(1)
+    expect(result).toEqual(pedido)
   })
 
   it('test buildItens method with a not registered product', async () => {
+    const itemRemovido = {
+      produtoId: '1',
+      ingredientesRemovidos: ['item']
+    }
 
+    const input:CreatePedidoRequest = {
+      consumidorId: '1',
+      itens: [itemRemovido]
+    }
+    const consumidor = Consumidor.create('nome', '57965568438', 'test@test.com')
+    const pedido = Pedido.create(consumidor, [], PedidoStatusEnum.PAGAMENTO_PENDENTE)
+    mockConsumidorFindById.mockResolvedValue(consumidor)
+    mockProdutoFindById.mockResolvedValue(null)
+    mockPedidoCreate.mockResolvedValue(pedido)
+    mockPaymentRegisterOrder.mockResolvedValue('1')
+
+    await expect(useCase.handle(input)).rejects.toThrow(new BusinessException('Produto não encontrado'))
   })
-
-  it('test buildItens method with a registered product', async () => {
-
-  }) */
 })

@@ -1,3 +1,4 @@
+import Ingrediente from '@/core/domain/entities/ingrediente'
 import Produto from '@/core/domain/entities/produto'
 import { ProdutoCategoriaEnum } from '@/core/domain/enums/produto-categoria.enum'
 import ProdutoMapper from '@/core/domain/mappers/produto.mapper'
@@ -24,6 +25,14 @@ describe('Testing ProdutoMapper Class', () => {
   })
 
   it('toDomainEntity static method should receive ProdutoDto Class and return Produto class', () => {
+    const ingrediente = new Ingrediente({
+      id: '1',
+      nome: 'test',
+      imagemUrl: 'test',
+      preco: 1,
+      produtoId: '1'
+    })
+
     const dto = {
       id: '',
       nome: '',
@@ -31,7 +40,7 @@ describe('Testing ProdutoMapper Class', () => {
       preco: 1,
       imagemUrl: '',
       categoria: ProdutoCategoriaEnum.ACOMPANHAMENTO,
-      ingredientes: [],
+      ingredientes: [ingrediente],
       deletedAt: new Date(1)
     }
 

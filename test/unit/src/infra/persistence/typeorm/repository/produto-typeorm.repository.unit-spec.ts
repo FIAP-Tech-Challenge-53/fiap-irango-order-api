@@ -268,7 +268,7 @@ describe('ProdutoTypeormRepository Class Tests', () => {
     toDomainEntity.mockResolvedValue(produto)
     repository.find.mockResolvedValue([entity])
 
-    await produtoRepository.find()
+    await produtoRepository.findByCategoria(ProdutoCategoriaEnum.ACOMPANHAMENTO)
 
     expect(toDomainEntity).toHaveBeenCalledTimes(1)
     expect(repository.find).toHaveBeenCalledTimes(1)
