@@ -1,6 +1,6 @@
 version: '2.2'
 services:
-  irangoorder-api:
+  irango-order-api:
     container_name: irango-order-api
     cpus: 2
     mem_limit: 2000m
