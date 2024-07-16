@@ -12,13 +12,11 @@
 ![editorconfig](https://shields.io/badge/EditorConfig-000000?logo=EditorConfig&logoColor=FFF&style=flat-square)
 ![typeorm](https://shields.io/badge/TypeORM-F37626?logo=TypeORM&logoColor=FFF&style=flat-square)
 
-This project involves the development of an API for a fast food self-service system, proposed as a Tech Challenge for the Software Architecture Postgraduate Course at FIAP..
+This project is a part of a fast food self-service system, proposed as a Tech Challenge for the Software Architecture Postgraduate Course at FIAP.
 
 For this project, we utilized the [TypeScript](https://www.typescriptlang.org/) programming language with [Node.js](https://nodejs.org/) and the [Nest.js](https://nestjs.com/) framework. The database management includes [MySQL 5.7](https://www.mysql.com/) to handle information related to Consumidor, Produto, and Pedido. Additionally, an in-memory [Redis](https://redis.io/) database is employed for caching.
 
 To build the API documentation, we've used [Swagger](https://swagger.io/) tool integrated with Nest.js, accessible through the endpoint: {irango_host}/docs
-
-## [DDD - Domain Driven Design Diagrams](./docs/domain-driven-design.md)
 
 ## Workspace Dependencies
 - [Node 20.10](https://nodejs.org/)
@@ -36,6 +34,12 @@ Install project dependencies with:
 ```bash
 npm run install
 ```
+
+* Create MySQL and Redis databases or start [fiap-irango-database/docker-compose.yml](https://github.com/FIAP-Tech-Challenge-53/fiap-irango-database/blob/main/docker-compose.yml) file.
+
+* Start [fiap-irango-payment-api](https://github.com/FIAP-Tech-Challenge-53/fiap-irango-payment-api) service. It can be run after fiap-irango-order-api starts.
+
+* Start [fiap-irango-cook-api](https://github.com/FIAP-Tech-Challenge-53/fiap-irango-cook-api) service. It can be run after fiap-irango-order-api starts.
 
 ## Start Project using Docker
 Configure all docker containers and volumes and start the application
@@ -96,20 +100,28 @@ We developed few endpoints which can be found in [consumidores.controller.ts](./
 > GET {irango_host}/v1/pedidos/:id
 7. Atualizar status do pedido
 > PUT {irango_host}/v1/produtos/:id
-8. Webhook de Pagamento (Mercado Pago)
-> POST {irango_host}/v1/pedidos/pagamento-webhook/mercado-pago
-9. Listar os pedidos
+8. Listar os pedidos
 > GET {irango_host}/v1/pedidos
 
 ## Automated Tests
-### Run all tests
+### Unit Tests
 ```bash
-npm run test
+npm run test:unit
 ```
 
 ### Test Coverage
 ```bash
 npm run test:coverage
+```
+
+### Integration Tests
+```bash
+npm run test:integration
+```
+
+### BDD Tests
+```bash
+npm run test:bdd:local
 ```
 
 <img src="./docs/test_suite.png" alt="Test Suite Coverage" width="900" />
