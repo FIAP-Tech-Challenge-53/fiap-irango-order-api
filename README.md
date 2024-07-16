@@ -16,7 +16,7 @@ This project is a part of a fast food self-service system, proposed as a Tech Ch
 
 For this project, we utilized the [TypeScript](https://www.typescriptlang.org/) programming language with [Node.js](https://nodejs.org/) and the [Nest.js](https://nestjs.com/) framework. The database management includes [MySQL 5.7](https://www.mysql.com/) to handle information related to Consumidor, Produto, and Pedido. Additionally, an in-memory [Redis](https://redis.io/) database is employed for caching.
 
-To build the API documentation, we've used [Swagger](https://swagger.io/) tool integrated with Nest.js, accessible through the endpoint: {irango_host}/docs
+To build the API documentation, we've used [Swagger](https://swagger.io/) tool integrated with Nest.js, accessible through the endpoint: {irango_order_host}/docs
 
 ## Workspace Dependencies
 - [Node 20.10](https://nodejs.org/)
@@ -83,25 +83,25 @@ We developed few endpoints which can be found in [consumidores.controller.ts](./
 
 ## Business Requirements:
 1. Cadastro do Cliente
-> POST {irango_host}/v1/consumidores
+> POST {irango_order_host}/v1/consumidores
 2. Identificação do Cliente via CPF
-> GET {irango_host}/v1/consumidores/cpf
+> GET {irango_order_host}/v1/consumidores/cpf
 3. Criar, editar e remover de produto
-> POST {irango_host}/v1/produtos
+> POST {irango_order_host}/v1/produtos
 
-> PUT {irango_host}/v1/produtos/:id
+> PUT {irango_order_host}/v1/produtos/:id
 
-> DELETE {irango_host}/v1/produtos/:id
+> DELETE {irango_order_host}/v1/produtos/:id
 4. Buscar produtos por categoria
-> GET {irango_host}/v1/produtos/categorias/:termo
+> GET {irango_order_host}/v1/produtos/categorias/:termo
 5. Checkout
-> POST {irango_host}/v1/pedidos
+> POST {irango_order_host}/v1/pedidos
 6. Verificar status do Pedido
-> GET {irango_host}/v1/pedidos/:id
+> GET {irango_order_host}/v1/pedidos/:id
 7. Atualizar status do pedido
-> PUT {irango_host}/v1/produtos/:id
+> PUT {irango_order_host}/v1/produtos/:id
 8. Listar os pedidos
-> GET {irango_host}/v1/pedidos
+> GET {irango_order_host}/v1/pedidos
 
 ## Automated Tests
 ### Unit Tests
