@@ -68,13 +68,19 @@ export class Environment {
     return process.env.CACHE_ENABLED === 'true'
   }
 
-  // SERVICE_IRANGO_PAYMENT_API="http://127.0.0.1:3002"
-  static get SERVICE_IRANGO_PAYMENT_API () {
-    return process.env.SERVICE_IRANGO_PAYMENT_API || 'http://localhost:3002'
+  static get AWS_REGION () {
+    return process.env.AWS_REGION || 'us-east-1'
   }
 
-  // SERVICE_IRANGO_COOK_API="http://127.0.0.1:3003"
-  static get SERVICE_IRANGO_COOK_API () {
-    return process.env.SERVICE_IRANGO_COOK_API || 'http://localhost:3003'
+  static get AWS_ACCESS_KEY_ID () {
+    return process.env.AWS_ACCESS_KEY_ID || 'qualquercoisa'
+  }
+
+  static get AWS_SECRET_ACCESS_KEY () {
+    return process.env.AWS_SECRET_ACCESS_KEY || 'qualquercoisa'
+  }
+
+  static get SNS_TOPIC_ORDER_CREATED () {
+    return process.env.SNS_TOPIC_ORDER_CREATED || 'arn:aws:sns:us-east-1:000000000000:fiap-irango-order_order-created_dev'
   }
 }

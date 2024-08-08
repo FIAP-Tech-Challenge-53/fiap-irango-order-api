@@ -156,23 +156,43 @@ describe('Test for static methods of Environment class', () => {
     expect(Environment.CACHE_ENABLED).toEqual(true)
   })
 
-  it('test get SERVICE_IRANGO_PAYMENT_API method', () => {
-    process.env.SERVICE_IRANGO_PAYMENT_API = 'test'
-    expect(Environment.SERVICE_IRANGO_PAYMENT_API).toEqual('test')
+  it('test get AWS_REGION method', () => {
+    process.env.AWS_REGION = 'test'
+    expect(Environment.AWS_REGION).toEqual('test')
   })
 
-  it('test get SERVICE_IRANGO_PAYMENT_API method default value', () => {
-    delete process.env.SERVICE_IRANGO_PAYMENT_API
-    expect(Environment.SERVICE_IRANGO_PAYMENT_API).toEqual('http://localhost:3002')
+  it('test get AWS_REGION method default value', () => {
+    delete process.env.AWS_REGION
+    expect(Environment.AWS_REGION).toEqual('us-east-1')
   })
 
-  it('test get SERVICE_IRANGO_COOK_API method', () => {
-    process.env.SERVICE_IRANGO_COOK_API = 'test'
-    expect(Environment.SERVICE_IRANGO_COOK_API).toEqual('test')
+  it('test get AWS_ACCESS_KEY_ID method', () => {
+    process.env.AWS_ACCESS_KEY_ID = 'test'
+    expect(Environment.AWS_ACCESS_KEY_ID).toEqual('test')
   })
 
-  it('test get SERVICE_IRANGO_COOK_API method default value', () => {
-    delete process.env.SERVICE_IRANGO_COOK_API
-    expect(Environment.SERVICE_IRANGO_COOK_API).toEqual('http://localhost:3003')
+  it('test get AWS_ACCESS_KEY_ID method default value', () => {
+    delete process.env.AWS_ACCESS_KEY_ID
+    expect(Environment.AWS_ACCESS_KEY_ID).toEqual('qualquercoisa')
+  })
+
+  it('test get AWS_SECRET_ACCESS_KEY method', () => {
+    process.env.AWS_SECRET_ACCESS_KEY = 'test'
+    expect(Environment.AWS_SECRET_ACCESS_KEY).toEqual('test')
+  })
+
+  it('test get AWS_SECRET_ACCESS_KEY method default value', () => {
+    delete process.env.AWS_SECRET_ACCESS_KEY
+    expect(Environment.AWS_SECRET_ACCESS_KEY).toEqual('qualquercoisa')
+  })
+
+  it('test get SNS_TOPIC_ORDER_CREATED method', () => {
+    process.env.SNS_TOPIC_ORDER_CREATED = 'test'
+    expect(Environment.SNS_TOPIC_ORDER_CREATED).toEqual('test')
+  })
+
+  it('test get SNS_TOPIC_ORDER_CREATED method default value', () => {
+    delete process.env.SNS_TOPIC_ORDER_CREATED
+    expect(Environment.SNS_TOPIC_ORDER_CREATED).toEqual('arn:aws:sns:us-east-1:000000000000:fiap-irango-order_order-created_dev')
   })
 })

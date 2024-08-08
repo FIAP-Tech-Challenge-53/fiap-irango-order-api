@@ -20,9 +20,6 @@ import IPedidoRepository, {
 import IProdutoRepository, {
   IProdutoRepository as IProdutoRepositorySymbol,
 } from '@/core/domain/repositories/iproduto.repository'
-import ICookService, {
-  ICookService as ICookServiceSymbol,
-} from '@/core/domain/services/icook.service'
 import IPaymentService, {
   IPaymentService as IPaymentServiceSymbol,
 } from '@/core/domain/services/ipayment.service'
@@ -40,7 +37,6 @@ export default class PedidosController {
     @Inject(IConsumidorRepositorySymbol) private readonly consumidorRepository: IConsumidorRepository,
     @Inject(IProdutoRepositorySymbol) private readonly produtoRepository: IProdutoRepository,
     @Inject(IPaymentServiceSymbol) private readonly paymentService: IPaymentService,
-    @Inject(ICookServiceSymbol) private readonly cookService: ICookService,
   ) {}
 
   @Get()
@@ -52,7 +48,6 @@ export default class PedidosController {
       this.consumidorRepository,
       this.produtoRepository,
       this.paymentService,
-      this.cookService,
     )
 
     return controller.list()
@@ -71,7 +66,6 @@ export default class PedidosController {
       this.consumidorRepository,
       this.produtoRepository,
       this.paymentService,
-      this.cookService,
     )
 
     return controller.create(input)
@@ -91,64 +85,9 @@ export default class PedidosController {
       this.consumidorRepository,
       this.produtoRepository,
       this.paymentService,
-      this.cookService,
     )
 
     return controller.update(id, input)
-  }
-
-  @Post('/payment-webhook/confirm/:id')
-  @ApiOperation({ summary: 'Receber e processar o evento de confirmação de pagamento de um Pedido a partir do serviço irango-payment' })
-  @ApiParam({ name: 'id', required: true, example: 12345 })
-  @ApiOkResponse({ description: 'O registro atualizado', type: PedidoResponse })
-  confirmPayment (
-    @Param('id') id: number,
-  ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
-
-    return controller.confirmPayment(id)
-  }
-
-  @Post('/cook-webhook/start/:id')
-  @ApiOperation({ summary: 'Receber e processar o evento de início de preparo de um Pedido a partir do serviço irango-cook' })
-  @ApiParam({ name: 'id', required: true, example: 12345 })
-  @ApiOkResponse({ description: 'O registro atualizado', type: PedidoResponse })
-  startCooking (
-    @Param('id') id: number,
-  ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
-
-    return controller.startCooking(id)
-  }
-
-  @Post('/cook-webhook/finish/:id')
-  @ApiOperation({ summary: 'Receber e processar o evento de finalização de preparo de um Pedido a partir do serviço irango-cook' })
-  @ApiParam({ name: 'id', required: true, example: 12345 })
-  @ApiOkResponse({ description: 'O registro atualizado', type: PedidoResponse })
-  finishCooking (
-    @Param('id') id: number,
-  ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
-
-    return controller.finishCooking(id)
   }
 
   @Get('/:id')
@@ -163,7 +102,6 @@ export default class PedidosController {
       this.consumidorRepository,
       this.produtoRepository,
       this.paymentService,
-      this.cookService,
     )
 
     return controller.findById(id)
