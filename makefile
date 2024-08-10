@@ -5,7 +5,7 @@ NETWORK_ID=$(shell docker network ls -qf "name=${NETWORK_NAME}")
 
 CONTAINER_MYSQL = local-mysql
 CONTAINER_REDIS = local-redis
-CONTAINER_BACKEND = service-irango-order-api
+CONTAINER_BACKEND = irango-order-api
 
 DATABASE = irango_order
 

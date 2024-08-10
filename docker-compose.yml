@@ -1,7 +1,7 @@
 version: '2.2'
 services:
-  service-irango-order-api:
-    container_name: service-irango-order-api
+  irango-order-api:
+    container_name: irango-order-api
     cpus: 2
     mem_limit: 2000m
     environment:

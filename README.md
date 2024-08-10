@@ -12,13 +12,11 @@
 ![editorconfig](https://shields.io/badge/EditorConfig-000000?logo=EditorConfig&logoColor=FFF&style=flat-square)
 ![typeorm](https://shields.io/badge/TypeORM-F37626?logo=TypeORM&logoColor=FFF&style=flat-square)
 
-This project involves the development of an API for a fast food self-service system, proposed as a Tech Challenge for the Software Architecture Postgraduate Course at FIAP.
+This project is a part of a fast food self-service system, proposed as a Tech Challenge for the Software Architecture Postgraduate Course at FIAP.
 
 For this project, we utilized the [TypeScript](https://www.typescriptlang.org/) programming language with [Node.js](https://nodejs.org/) and the [Nest.js](https://nestjs.com/) framework. The database management includes [MySQL 5.7](https://www.mysql.com/) to handle information related to Consumidor, Produto, and Pedido. Additionally, an in-memory [Redis](https://redis.io/) database is employed for caching.
 
-To build the API documentation, we've used [Swagger](https://swagger.io/) tool integrated with Nest.js, accessible through the endpoint: {irango_host}/docs
-
-## [DDD - Domain Driven Design Diagrams](./docs/domain-driven-design.md)
+To build the API documentation, we've used [Swagger](https://swagger.io/) tool integrated with Nest.js, accessible through the endpoint: {irango_order_host}/docs
 
 ## Workspace Dependencies
 - [Node 20.10](https://nodejs.org/)
@@ -37,6 +35,12 @@ Install project dependencies with:
 npm run install
 ```
 
+* Create MySQL and Redis databases or start [fiap-irango-database/docker-compose.yml](https://github.com/FIAP-Tech-Challenge-53/fiap-irango-database/blob/main/docker-compose.yml) file.
+
+* Start [fiap-irango-payment-api](https://github.com/FIAP-Tech-Challenge-53/fiap-irango-payment-api) service. It can be run after fiap-irango-order-api starts.
+
+* Start [fiap-irango-cook-api](https://github.com/FIAP-Tech-Challenge-53/fiap-irango-cook-api) service. It can be run after fiap-irango-order-api starts.
+
 ## Start Project using Docker
 Configure all docker containers and volumes and start the application
 ```bash
@@ -49,8 +53,8 @@ cp .env.example .env
 cp .env.local.test.example .env.test
 docker compose build --progress=plain
 docker compose up
-docker compose exec -it service-irango-order-api npm run migration:run
-docker compose exec -it service-irango-order-api npm run seed:run
+docker compose exec -it irango-order-api npm run migration:run
+docker compose exec -it irango-order-api npm run seed:run
 ```
 
 ## Start project using npm
@@ -79,65 +83,49 @@ We developed few endpoints which can be found in [consumidores.controller.ts](./
 
 ## Business Requirements:
 1. Cadastro do Cliente
-> POST {irango_host}/v1/consumidores
+> POST {irango_order_host}/v1/consumidores
 2. Identificação do Cliente via CPF
-> GET {irango_host}/v1/consumidores/cpf
+> GET {irango_order_host}/v1/consumidores/cpf
 3. Criar, editar e remover de produto
-> POST {irango_host}/v1/produtos
+> POST {irango_order_host}/v1/produtos
 
-> PUT {irango_host}/v1/produtos/:id
+> PUT {irango_order_host}/v1/produtos/:id
 
-> DELETE {irango_host}/v1/produtos/:id
+> DELETE {irango_order_host}/v1/produtos/:id
 4. Buscar produtos por categoria
-> GET {irango_host}/v1/produtos/categorias/:termo
+> GET {irango_order_host}/v1/produtos/categorias/:termo
 5. Checkout
-> POST {irango_host}/v1/pedidos
+> POST {irango_order_host}/v1/pedidos
 6. Verificar status do Pedido
-> GET {irango_host}/v1/pedidos/:id
+> GET {irango_order_host}/v1/pedidos/:id
 7. Atualizar status do pedido
-> PUT {irango_host}/v1/produtos/:id
-8. Webhook de Pagamento (Mercado Pago)
-> POST {irango_host}/v1/pedidos/pagamento-webhook/mercado-pago
-9. Listar os pedidos
-> GET {irango_host}/v1/pedidos
+> PUT {irango_order_host}/v1/produtos/:id
+8. Listar os pedidos
+> GET {irango_order_host}/v1/pedidos
 
 ## Automated Tests
-We developed integration tests which can be run using docker or in directly in local machine (in this case you need change the `DB_HOSTNAME` env to `localhost`). Before run the tests, we need to create the test database using:
+### Unit Tests
 ```bash
-make test.integration.createdb
-
-# or try without make
-docker exec -it ${CONTAINER_MYSQL} mysql -uroot -ppassword -e "DROP DATABASE IF EXISTS ${DATABASE}_test; CREATE DATABASE ${DATABASE}_test;"
-docker compose exec -it ${CONTAINER_BACKEND} npm run migration:run:test
+npm run test:unit
 ```
 
-### Run all tests (We just have integrations for while)
+### Test Coverage
 ```bash
-# With docker
-docker compose run service-irango-order-api npm run test
-
-# local
-npm run test
+npm run test:coverage
 ```
 
-### Run only integration tests local
+### Integration Tests
 ```bash
-# With docker
-docker compose run service-irango-order-api npm run test:integration
-
-# local
-npm run test:integration:local
+npm run test:integration
 ```
 
-### Run a specifc test file local
+### BDD Tests
 ```bash
-# With docker
-docker compose run service-irango-order-api npm run test:integration:one <FILE_NAME>
-
-# local
-npm run test:integration:local:one <FILE_NAME>
-
+npm run test:bdd:local
 ```
+
+<img src="./docs/test_suite.png" alt="Test Suite Coverage" width="900" />
+
 
 ## Make commands
 ### Using Docker
