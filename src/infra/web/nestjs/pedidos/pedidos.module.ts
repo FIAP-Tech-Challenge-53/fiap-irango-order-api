@@ -10,9 +10,10 @@ import PedidoTypeormRepository from '@/infra/persistence/typeorm/repository/pedi
 import ConsumidoresModule from '@/infra/web/nestjs/consumidores/consumidores.module'
 import PedidosController from '@/infra/web/nestjs/pedidos/pedidos.controller'
 import ProdutosModule from '@/infra/web/nestjs/produtos/produtos.module'
-import { StartCookHandler } from '@/infra/web/nestjs/pedidos/handles/start-cook.handles'
-import { FinishCookHandler } from '@/infra/web/nestjs/pedidos/handles/finish-cook.handles'
-import { ConfirmPaymentHandler } from '@/infra/web/nestjs/pedidos/handles/confirm-payment.handles'
+import { StartCookHandler } from '@/infra/queue/handles/start-cook.handles'
+import { FinishCookHandler } from '@/infra/queue/handles/finish-cook.handles'
+import { ConfirmPaymentHandler } from '@/infra/queue/handles/confirm-payment.handles'
+import { CreatedPaymentHandler } from '@/infra/queue/handles/created-payment.handles'
 import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedido.controller.factory'
 
 @Module({
@@ -30,6 +31,7 @@ import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedi
     { provide: IPaymentService, useClass: IRangoPaymentService },
     StartCookHandler,
     FinishCookHandler,
+    CreatedPaymentHandler,
     ConfirmPaymentHandler,
     PedidoControllerFactory
   ],

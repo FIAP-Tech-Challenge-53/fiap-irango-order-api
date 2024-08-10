@@ -1,5 +1,6 @@
 import ConfirmPayment from '@/core/application/usecase/pedido/confirmPayment.use-case'
 import Create from '@/core/application/usecase/pedido/create.use-case'
+import CreatePayment from '@/core/application/usecase/pedido/createPayment.use-case'
 import FindById from '@/core/application/usecase/pedido/findById.use-case'
 import FinishCooking from '@/core/application/usecase/pedido/finishCooking.use-case'
 import List from '@/core/application/usecase/pedido/list.use-case'
@@ -68,6 +69,18 @@ export class PedidoController {
     )
 
     const pedido = await useCase.handle(id)
+    return PedidoMapper.toDto(pedido)
+  }
+
+  async createPayment(
+    id: number,
+    pagamentoId: string,
+  ): Promise<PedidoDto> {
+    const useCase = new CreatePayment(
+      new PedidoGateway(this.repository),
+    )
+
+    const pedido = await useCase.handle(id, pagamentoId)
     return PedidoMapper.toDto(pedido)
   }
 

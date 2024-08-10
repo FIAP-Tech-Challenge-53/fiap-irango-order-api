@@ -96,17 +96,11 @@ export class Environment {
     return process.env.CONFIRM_PAYMENT_QUEUE || 'fiap-irango-order_payment-confirmed_dev'
   }
 
-  static get URL_QUEUE () {
-    return process.env.URL_QUEUE || 'http://localhost:4566/000000000000/fiap-irango-cook_payment-confirmed_dev'
+  static get CREATED_PAYMENT_QUEUE() {
+    return process.env.CREATED_PAYMENT_QUEUE || 'fiap-irango-order_payment-created_dev'
   }
 
-
-  static get URL_QUEUE_START_COOK_QUEUE () {
-    return process.env.URL_QUEUE_START_COOK_QUEUE || 'http://localhost:4566/000000000000/fiap-irango-order_cooking-started_dev'
-  }
-
-
-  static get URL_QUEUE_FINISH_COOK_QUEUE () {
-    return process.env.URL_QUEUE_FINISH_COOK_QUEUE || 'http://localhost:4566/000000000000/fiap-irango-order_cooking-finished_dev'
+  static get URL_QUEUE() {
+    return process.env.URL_QUEUE || 'http://localhost:4566/000000000000/'
   }
 }
