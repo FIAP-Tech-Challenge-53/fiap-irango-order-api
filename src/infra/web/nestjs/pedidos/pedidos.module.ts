@@ -12,6 +12,10 @@ import PedidoTypeormRepository from '@/infra/persistence/typeorm/repository/pedi
 import ConsumidoresModule from '@/infra/web/nestjs/consumidores/consumidores.module'
 import PedidosController from '@/infra/web/nestjs/pedidos/pedidos.controller'
 import ProdutosModule from '@/infra/web/nestjs/produtos/produtos.module'
+import { StartCookHandler } from '@/infra/web/nestjs/pedidos/handles/start-cook.handles'
+import { FinishCookHandler } from '@/infra/web/nestjs/pedidos/handles/finish-cook.handles'
+import { ConfirmPaymentHandler } from '@/infra/web/nestjs/pedidos/handles/confirm-payment.handles'
+import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedido.controller.factory'
 
 @Module({
   imports: [
@@ -27,7 +31,10 @@ import ProdutosModule from '@/infra/web/nestjs/produtos/produtos.module'
     { provide: IPedidoRepository, useClass: PedidoTypeormRepository },
     { provide: IPaymentService, useClass: IRangoPaymentService },
     { provide: ICookService, useClass: IRangoCookService },
-
+    StartCookHandler,
+    FinishCookHandler,
+    ConfirmPaymentHandler,
+    PedidoControllerFactory
   ],
   controllers: [
     PedidosController

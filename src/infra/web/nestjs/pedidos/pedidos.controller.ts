@@ -43,17 +43,21 @@ export default class PedidosController {
     @Inject(ICookServiceSymbol) private readonly cookService: ICookService,
   ) {}
 
-  @Get()
-  @ApiOperation({ summary: 'Listar todos os Pedidos' })
-  @ApiOkResponse({ description: 'Todos os Pedidos', type: [PedidoResponse], isArray: true })
-  list (): Promise<PedidoResponse[]> {
-    const controller = new PedidoController(
+
+  private getController(): PedidoController {
+    return new PedidoController(
       this.repository,
       this.consumidorRepository,
       this.produtoRepository,
       this.paymentService,
       this.cookService,
     )
+  }
+  @Get()
+  @ApiOperation({ summary: 'Listar todos os Pedidos' })
+  @ApiOkResponse({ description: 'Todos os Pedidos', type: [PedidoResponse], isArray: true })
+  list(): Promise<PedidoResponse[]> {
+    const controller = this.getController()
 
     return controller.list()
   }
@@ -66,13 +70,7 @@ export default class PedidosController {
   create (
     @Body() input: CreatePedidoRequest
   ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
+    const controller = this.getController()
 
     return controller.create(input)
   }
@@ -86,13 +84,7 @@ export default class PedidosController {
     @Param('id') id: number,
     @Body() input: UpdatePedidoRequest
   ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
+    const controller = this.getController()
 
     return controller.update(id, input)
   }
@@ -104,13 +96,7 @@ export default class PedidosController {
   confirmPayment (
     @Param('id') id: number,
   ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
+    const controller = this.getController()
 
     return controller.confirmPayment(id)
   }
@@ -122,13 +108,7 @@ export default class PedidosController {
   startCooking (
     @Param('id') id: number,
   ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
+    const controller = this.getController()
 
     return controller.startCooking(id)
   }
@@ -140,13 +120,7 @@ export default class PedidosController {
   finishCooking (
     @Param('id') id: number,
   ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
+    const controller = this.getController()
 
     return controller.finishCooking(id)
   }
@@ -158,13 +132,7 @@ export default class PedidosController {
   findById (
     @Param('id') id: number,
   ): Promise<PedidoResponse> {
-    const controller = new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-      this.cookService,
-    )
+    const controller = this.getController()
 
     return controller.findById(id)
   }

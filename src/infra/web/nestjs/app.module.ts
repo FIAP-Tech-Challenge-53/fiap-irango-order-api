@@ -12,12 +12,20 @@ import AppController from '@/infra/web/nestjs/app.controller'
 import ConsumidoresModule from '@/infra/web/nestjs/consumidores/consumidores.module'
 import PedidosModule from '@/infra/web/nestjs/pedidos/pedidos.module'
 import ProdutosModule from '@/infra/web/nestjs/produtos/produtos.module'
+import { SqsModule } from '@ssut/nestjs-sqs'
+import { Environment } from '@/infra/web/nestjs/environment'
 
 export const appModules = [
   ConsumidoresModule,
   ProdutosModule,
   PedidosModule
 ]
+
+// AWS.config.update({
+//   region: config.AWS_REGION,
+//   accessKeyId: config.ACCESS_KEY_ID,
+//   secretAccessKey: config.SECRET_ACCESS_KEY,
+// });
 
 @Global()
 @Module({
@@ -27,7 +35,34 @@ export const appModules = [
       store: redisStore,
       ...RedisConfig
     }),
+    SqsModule.register({
+      consumers: [
+        {
+          name: Environment.CONFIRM_PAYMENT_QUEUE, // name of the queue 
+          queueUrl: Environment.URL_QUEUE, // the url of the queue
+          region: Environment.AWS_REGION,
 
+        },
+        {
+          name: Environment.FINISH_COOK_QUEUE, // name of the queue 
+          queueUrl: Environment.URL_QUEUE_FINISH_COOK_QUEUE, // the url of the queue
+          region: Environment.AWS_REGION,
+        },
+        {
+          name: Environment.START_COOK_QUEUE, // name of the queue 
+          queueUrl: Environment.URL_QUEUE_START_COOK_QUEUE, // the url of the queue
+          region: Environment.AWS_REGION,
+        },
+      ],
+      producers: [
+        {
+          name: Environment.CONFIRM_PAYMENT_QUEUE, // name of the queue 
+          queueUrl: Environment.URL_QUEUE, // the url of the queue
+          region: Environment.AWS_REGION,
+
+        },
+      ],
+    }),
     ...appModules
   ],
   controllers: [
@@ -41,10 +76,10 @@ export const appModules = [
   ]
 })
 export default class AppModule {
-  constructor (@Inject(CACHE_MANAGER) private cacheManager: Cache
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
-  async onApplicationShutdown () {
+  async onApplicationShutdown() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (this.cacheManager as any).store.getClient().quit()
   }

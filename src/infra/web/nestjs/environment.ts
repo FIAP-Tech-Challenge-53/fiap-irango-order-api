@@ -77,4 +77,34 @@ export class Environment {
   static get SERVICE_IRANGO_COOK_API () {
     return process.env.SERVICE_IRANGO_COOK_API || 'http://localhost:3003'
   }
+
+  static get START_COOK_QUEUE () {
+    return process.env.START_COOK_QUEUE || 'fiap-irango-order_cooking-started_dev'
+  }
+
+  static get FINISH_COOK_QUEUE () {
+    return process.env.START_FINISH_QUEUE || 'fiap-irango-order_cooking-finished_dev'
+  }
+
+  static get CONFIRM_PAYMENT_QUEUE () {
+    return process.env.CONFIRM_PAYMENT_QUEUE || 'fiap-irango-order_payment-confirmed_dev'
+  }
+
+  static get URL_QUEUE () {
+    return process.env.URL_QUEUE || 'fiap-irango-order_cooking-finished_dev'
+  }
+
+
+  static get URL_QUEUE_START_COOK_QUEUE () {
+    return process.env.URL_QUEUE_START_COOK_QUEUE || 'fiap-irango-order_cooking-finished_dev'
+  }
+
+
+  static get URL_QUEUE_FINISH_COOK_QUEUE () {
+    return process.env.URL_QUEUE_FINISH_COOK_QUEUE || 'fiap-irango-order_cooking-finished_dev'
+  }
+
+  static get AWS_REGION () {
+    return process.env.AWS_REGION || 'http://localhost:3003'
+  }
 }
