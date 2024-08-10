@@ -11,9 +11,6 @@ import IPedidoRepository, {
 import IProdutoRepository, {
   IProdutoRepository as IProdutoRepositorySymbol,
 } from '@/core/domain/repositories/iproduto.repository'
-import ICookService, {
-  ICookService as ICookServiceSymbol,
-} from '@/core/domain/services/icook.service'
 import IPaymentService, {
   IPaymentService as IPaymentServiceSymbol,
 } from '@/core/domain/services/ipayment.service'
@@ -24,7 +21,6 @@ export class PedidoControllerFactory {
     @Inject(IPedidoRepositorySymbol) private readonly repository: IPedidoRepository,
     @Inject(IConsumidorRepositorySymbol) private readonly consumidorRepository: IConsumidorRepository,
     @Inject(IProdutoRepositorySymbol) private readonly produtoRepository: IProdutoRepository,
-    @Inject(ICookServiceSymbol) private readonly cookService: ICookService,
     @Inject(IPaymentServiceSymbol) private readonly paymentService: IPaymentService,
   ) {
 
@@ -36,7 +32,6 @@ export class PedidoControllerFactory {
       this.consumidorRepository,
       this.produtoRepository,
       this.paymentService,
-      this.cookService,
     )
   }
 

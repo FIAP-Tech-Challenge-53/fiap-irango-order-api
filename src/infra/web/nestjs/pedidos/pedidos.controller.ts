@@ -4,55 +4,30 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Inject,
   Param,
   Post,
   Put,
 } from '@nestjs/common'
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 
-import IConsumidorRepository, {
-  IConsumidorRepository as IConsumidorRepositorySymbol,
-} from '@/core/domain/repositories/iconsumidor.repository'
-import IPedidoRepository, {
-  IPedidoRepository as IPedidoRepositorySymbol,
-} from '@/core/domain/repositories/ipedido.repository'
-import IProdutoRepository, {
-  IProdutoRepository as IProdutoRepositorySymbol,
-} from '@/core/domain/repositories/iproduto.repository'
-import IPaymentService, {
-  IPaymentService as IPaymentServiceSymbol,
-} from '@/core/domain/services/ipayment.service'
-import { PedidoController } from '@/core/operation/controllers/pedido.controller'
 import PedidoResponse from '@/infra/web/nestjs/pedidos/dto/pedido.response'
 import UpdatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/update-pedido.request'
 
 import CreatePedidoRequest from './dto/create-pedido.request'
+import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedido.controller.factory'
 
 @Controller('v1/pedidos')
 @ApiTags('v1/pedidos')
 export default class PedidosController {
   constructor (
-    @Inject(IPedidoRepositorySymbol) private readonly repository: IPedidoRepository,
-    @Inject(IConsumidorRepositorySymbol) private readonly consumidorRepository: IConsumidorRepository,
-    @Inject(IProdutoRepositorySymbol) private readonly produtoRepository: IProdutoRepository,
-    @Inject(IPaymentServiceSymbol) private readonly paymentService: IPaymentService,
+    private readonly pedidoControllerFactory: PedidoControllerFactory,
   ) {}
 
-
-  private getController(): PedidoController {
-    return new PedidoController(
-      this.repository,
-      this.consumidorRepository,
-      this.produtoRepository,
-      this.paymentService,
-    )
-  }
   @Get()
   @ApiOperation({ summary: 'Listar todos os Pedidos' })
   @ApiOkResponse({ description: 'Todos os Pedidos', type: [PedidoResponse], isArray: true })
   list(): Promise<PedidoResponse[]> {
-    const controller = this.getController()
+    const controller = this.pedidoControllerFactory.get()
 
     return controller.list()
   }
@@ -65,7 +40,7 @@ export default class PedidosController {
   create (
     @Body() input: CreatePedidoRequest
   ): Promise<PedidoResponse> {
-    const controller = this.getController()
+    const controller = this.pedidoControllerFactory.get()
 
     return controller.create(input)
   }
@@ -79,7 +54,7 @@ export default class PedidosController {
     @Param('id') id: number,
     @Body() input: UpdatePedidoRequest
   ): Promise<PedidoResponse> {
-    const controller = this.getController()
+    const controller = this.pedidoControllerFactory.get()
 
     return controller.update(id, input)
   }
@@ -91,7 +66,7 @@ export default class PedidosController {
   findById (
     @Param('id') id: number,
   ): Promise<PedidoResponse> {
-    const controller = this.getController()
+    const controller = this.pedidoControllerFactory.get()
 
     return controller.findById(id)
   }
