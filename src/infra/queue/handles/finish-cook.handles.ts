@@ -15,9 +15,10 @@ export class FinishCookHandler {
   @SqsMessageHandler(/** name: */ Environment.FINISH_COOK_QUEUE, /** batch: */ false)
   public async handleMessage(message: Message) {
     const obj: any = JSON.parse(message.Body ?? '');
+    const input: any = JSON.parse(obj.Message ?? '');
     const controller = this.pedidoControllerFactory.get()
 
-    await controller.finishCooking(obj.id)
+    await controller.finishCooking(input.pedidoId)
   }
 
   @SqsConsumerEventHandler(/** name: */ Environment.FINISH_COOK_QUEUE, /** eventName: */ 'processing_error')

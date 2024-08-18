@@ -35,8 +35,6 @@ export default class Create {
     pedido = await this.gateway.create(pedido)
 
     await this.paymentGateway.registerOrder(pedido)
-    // pedido.pagamentoId = pagamentoId
-    // await this.gateway.save(pedido)
 
     return pedido
   }

@@ -14,9 +14,10 @@ export class ConfirmPaymentHandler {
   @SqsMessageHandler(/** name: */ Environment.CONFIRM_PAYMENT_QUEUE, /** batch: */ false)
   public async handleMessage(message: Message) {
     const obj: any = JSON.parse(message.Body ?? '');
+    const input: any = JSON.parse(obj.Message ?? '');
     const controller = this.pedidoControllerFactory.get()
 
-    await controller.confirmPayment(obj.id)
+    await controller.confirmPayment(input.pedidoId)
   }
 
   @SqsConsumerEventHandler(/** name: */ Environment.CONFIRM_PAYMENT_QUEUE, /** eventName: */ 'processing_error')
