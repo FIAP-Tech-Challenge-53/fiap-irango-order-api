@@ -58,7 +58,7 @@ O projeto é o desenvolvimento do backend de um sistema de autoatendimento de um
 
 ### 3.1. Tipos de Dados Pessoais Tratados
 
-    Os únicos dados pessoais tratados pelo sistema são os dados relativos ao Nome, Cpf e email da base de clientes cadastrados.
+Os únicos dados pessoais tratados pelo sistema são os dados relativos ao Nome, Cpf e email da base de clientes cadastrados.
 
 ### 3.2. Potenciais Riscos
 
@@ -99,31 +99,31 @@ O projeto é o desenvolvimento do backend de um sistema de autoatendimento de um
 
 - **Livre Acesso:** Os titulares dos dados têm o direito de acessar facilmente suas informações pessoais tratadas pelo sistema. Para garantir o livre acesso, o sistem preve funcionalidades que permitem aos usuários visualizar, atualizar e excluir seus dados diretamente pela interface do sistema.
 
--**Qualidade dos Dados:** O sistema assegura a qualidade dos dados coletados, garantindo que os dados pessoais sejam precisos, claros, relevantes e atualizados. Mecanismos de validações são aplicados durante a coleta de dados para reduzir erros e fornecer opções para que os usuários atualizem suas informações regularmente.
+- **Qualidade dos Dados:** O sistema assegura a qualidade dos dados coletados, garantindo que os dados pessoais sejam precisos, claros, relevantes e atualizados. Mecanismos de validações são aplicados durante a coleta de dados para reduzir erros e fornecer opções para que os usuários atualizem suas informações regularmente.
 
--**Transparência:** É informado claramente aos titulares dos dados sobre as práticas de tratamento de dados, por meio desse relatório que deve ser acessíveis através da interface de usuário. Em caso de invasão, todos os nossos clientes são notificados publicamente pelo evento ocorrido.
+- **Transparência:** É informado claramente aos titulares dos dados sobre as práticas de tratamento de dados, por meio desse relatório que deve ser acessíveis através da interface de usuário. Em caso de invasão, todos os nossos clientes são notificados publicamente pelo evento ocorrido.
 
--**Segurança:** É garantido que todas as medidas de Segurança descritas nesse relatório são efetivamente praticadas ao longo do desenvolvimento e mantenimento do sistema.
+- **Segurança:** É garantido que todas as medidas de Segurança descritas nesse relatório são efetivamente praticadas ao longo do desenvolvimento e mantenimento do sistema.
 
--**Prevenção:** São realizados testes de segurança regulares, como análises de vulnerabilidades e testes de penetração, para identificar e corrigir potenciais falhas antes que possam ser exploradas. O sistema é atualizado o mais rápido possível em casos de novas vulnerabilidades publicadas pela comunidade de segurança internacional.
+- **Prevenção:** São realizados testes de segurança regulares, como análises de vulnerabilidades e testes de penetração, para identificar e corrigir potenciais falhas antes que possam ser exploradas. O sistema é atualizado o mais rápido possível em casos de novas vulnerabilidades publicadas pela comunidade de segurança internacional.
 
--**Não Discriminação:** O tratamento de dados no sistema é realizado de forma justa e não discriminatória. Garantimos que as informações pessoais não são usadas para fins discriminatórios ou para tomar decisões que possam prejudicar os titulares com base em características protegidas, como raça, gênero ou orientação sexual.
+- **Não Discriminação:** O tratamento de dados no sistema é realizado de forma justa e não discriminatória. Garantimos que as informações pessoais não são usadas para fins discriminatórios ou para tomar decisões que possam prejudicar os titulares com base em características protegidas, como raça, gênero ou orientação sexual.
 
--**Responsabilização:** O sistema adota medidas para demonstrar a responsabilidade pelo tratamento dos dados, conforme exigido pela LGPD. Isso inclui a documentação detalhada dos processos de tratamento de dados, a realização de auditorias internas regulares e o compromisso com a conformidade contínua com as normas de proteção de dados. Os membros da equipe são treinados para compreender suas responsabilidades em relação à proteção de dados, e há um plano de resposta a incidentes de segurança.
+- **Responsabilização:** O sistema adota medidas para demonstrar a responsabilidade pelo tratamento dos dados, conforme exigido pela LGPD. Isso inclui a documentação detalhada dos processos de tratamento de dados, a realização de auditorias internas regulares e o compromisso com a conformidade contínua com as normas de proteção de dados. Os membros da equipe são treinados para compreender suas responsabilidades em relação à proteção de dados, e há um plano de resposta a incidentes de segurança.
 
 ## 6. Plano de Ação para Mitigação de Riscos
 
 ### 6.1. Ações Corretivas
 
--**Implementação de Logs de Acesso:** Mecanismos de Monitoramento de acesso aos dados são empregados para detecção de acessos não-autorizados.
+- **Implementação de Logs de Acesso:** Mecanismos de Monitoramento de acesso aos dados são empregados para detecção de acessos não-autorizados.
 
--**Aplicação de Atualizações de Segurança:** Se qualquer componente de software sofrer qualquer atualização voltado a segurança, tal patch é incorporado a infraestrutura do sistema o quanto antes pela equipe de desenvolvimento.
+- **Aplicação de Atualizações de Segurança:** Se qualquer componente de software sofrer qualquer atualização voltado a segurança, tal patch é incorporado a infraestrutura do sistema o quanto antes pela equipe de desenvolvimento.
 
--**Atualização de Algoritmos:** Dado o rápido avanço que a natureza do setor de tecnologia possui, caso algum algoritmo de segurança passar a ser considerado inseguro pela comunidade internacional de cybersegurança, nosso time de desenvolvimento se compromete em adequar o sistema, incluindo se necessário em casos críticos com a paralização da disponibilidade do serviço.
+- **Atualização de Algoritmos:** Dado o rápido avanço que a natureza do setor de tecnologia possui, caso algum algoritmo de segurança passar a ser considerado inseguro pela comunidade internacional de cybersegurança, nosso time de desenvolvimento se compromete em adequar o sistema, incluindo se necessário em casos críticos com a paralização da disponibilidade do serviço.
 
--**Notificação de Incidentes de CyberSegurança:** Caso os nossos sistemas sofram relevante espécie de incidente de cybersegurança incluindo: tentativa de invasão bem ou mal sucedida, vazamento de dados ou qualquer outro incidente que comprometa a segurança de dados de nosso clientes, a companhia se compromete notificar o incidente publicamente para todos que todos os seus usuários fiquem ciente do ocorrido.
+- **Notificação de Incidentes de CyberSegurança:** Caso os nossos sistemas sofram relevante espécie de incidente de cybersegurança incluindo: tentativa de invasão bem ou mal sucedida, vazamento de dados ou qualquer outro incidente que comprometa a segurança de dados de nosso clientes, a companhia se compromete notificar o incidente publicamente para todos que todos os seus usuários fiquem ciente do ocorrido.
 
--**Revisão da Política de Segurança:** Atualizações da Política de Segurança deverão acompanhar sempre que novas diretrizes e orientações sejam lançadas na esfera legislativa.
+- **Revisão da Política de Segurança:** Atualizações da Política de Segurança deverão acompanhar sempre que novas diretrizes e orientações sejam lançadas na esfera legislativa.
 
 
 ## 7. Conclusão
@@ -131,5 +131,5 @@ O projeto é o desenvolvimento do backend de um sistema de autoatendimento de um
 ### 7.1. Considerações Finais
 
 Por fim com esse relatório, firmamos o compromisso dos desenvolvedores desse sistema para com todos os clientes usuários do mesmo em relação a segurança e transparência do uso de dados realizado pelo mesmo seguindo todas as diretrizes orientadoras da Lei de Proteção de Dados Geral (LGPD).
- 
+
 ### 7.2. Assinatura e Data
