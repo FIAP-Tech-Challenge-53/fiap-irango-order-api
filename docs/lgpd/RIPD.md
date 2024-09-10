@@ -10,9 +10,37 @@ Este Relatório de Impacto à Proteção de Dados (RIPD) tem como objetivo avali
 
 O relatório abrange as operações de tratamento de dados pessoais, incluindo coleta, armazenamento, processamento e compartilhamento de dados, bem como as medidas de segurança implementadas para proteger esses dados de acordo com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
 
-## 2. Descrição do Projeto
+### 1.3. Identificação dos Agentes de Tratamento e do Encarregado
 
-### 2.1. Visão Geral
+- **Controlador:** irango LTDA (software house)
+
+- **Operadores:** estabelecimento comercial que comprou e usa a tecnologia, funcionário que operam a infra da solução.
+
+- **Encarregado:** algum especialista em governança de dados contratado pela irango LTDA.
+
+### 1.4. Necessidade de Elaborar o Relatório
+
+Atendimento ao artigo 5o, inciso II, artigo 10, parágrafo 3o., artigo 14, artigo 42 todos da Lei 13.907/2018 - Lei Geral de Proteção de Dados.
+
+## 2. Necessida e Proporcionalidade
+
+**Fundamentação legal:** artigo 5o, inciso II, artigo 10, parágrafo 3o., artigo 14, artigo 42 todos da Lei 13.907/2018 - Lei Geral de Proteção de Dados.
+Tendo em vista que o legítimo interesse do CONTROLADOR é uma das fundamentações em razão de sua responsabilidade solidária ao TITULAR em caso de irregularidade fiscal e tributária:
+
+- o tratamento dos dados sensíveis é indispensável ao cumprimento das exigências da legislação tributária, fiscal e trabalhista brasileira;
+
+- não há outra base legal possível de se utilizar para alcançar o mesmo propósito;
+
+- o processo atual de fato auxilia no propósito almejado. 
+
+Todos os dados coletados com essa finalidade são eliminados após o período exigido pela legislação, que é de 5 (cinco) anos. Enquanto perdurar esse prazo, o encarregado manterá todos os dados devidamente protegidos, inclusive para fins de recuperação de arquivos de segurança e recibos de transmissão e evidência de cumprimento de obrigação acessória e principal.
+As informações de privacidade aos titulares seguem as diretrizes da obrigatoriedade de se manterem arquivadas todas as evidências fiscais, tributárias e trabalhistas de todas as informações enviadas aos sistemas oficiais da autoridade tributária brasileira.
+A entidade CONTROLADORA poderá, a pedido do TITULAR, transferir a ele a guarda de tais informações, ressalvadas àquelas que o próprio CONTROLADOR, por dever de ofício, deve possuir pelo período constante da legislação.
+É importante constar que não há, por legislação, a retroatividade do processamento dos dados, em caso de transferência de guarda de informações. Para fins legais, o direito ao esquecimento será garantido para os dados usados em processos transacionais.
+
+## 3. Descrição do Projeto
+
+### 3.1. Visão Geral
 
 O projeto é o desenvolvimento do backend de um sistema de autoatendimento de uma lanchonete de fast food. O Sistema é composto por quatro serviços distintos:
 
@@ -25,7 +53,7 @@ O projeto é o desenvolvimento do backend de um sistema de autoatendimento de um
 - **Pagamentos:** Gerenciamento dos Pagamentos realizados através do Gateway Mercado Pago. Nenhuma informação do meio de pagamento do cliente é coletada e sequer trafegada pela infraestrutura do estabelecimento, toda a operação do pagamento é realizada diretamente na infraestrutura do gateway de pagamento Mercado Pago. As informações armazenadas na infraestrutura do estabelecimento são: id do pedido, valor total do pedido, id da transação no gateway de pagamento, data do pagamento. 
 
 
-### 2.2. Fluxo de Dados
+### 3.2. Fluxo de Dados
 
 - **Coleta:** Todos os Dados persistidos descritos no Item anterior são coletados via Web API's somente.
 
@@ -54,13 +82,13 @@ O projeto é o desenvolvimento do backend de um sistema de autoatendimento de um
 
     - **Transmissão Interna:** Refere-se a transmissão de dados que ocorrem internamente da rede VPC da infraestrutura. 
 
-## 3. Identificação e Análise de Riscos
+## 4. Identificação e Análise de Riscos
 
-### 3.1. Tipos de Dados Pessoais Tratados
+### 4.1. Tipos de Dados Pessoais Tratados
 
 Os únicos dados pessoais tratados pelo sistema são os dados relativos ao Nome, Cpf e email da base de clientes cadastrados.
 
-### 3.2. Potenciais Riscos
+### 4.2. Potenciais Riscos
 
 - **Risco de Acesso Não Autorizado:** Possibilidade de invasão nos servidores ou banco de dados, expondo dados pessoais dos clientes.
 
@@ -69,27 +97,30 @@ Os únicos dados pessoais tratados pelo sistema são os dados relativos ao Nome,
 - **Risco de Processamento Indevido:** Uso de dados para finalidades não previstas ou sem consentimento dos titulares. 
 
 
-## 4. Medidas de Segurança Implementadas
+## 5. Medidas de Segurança Implementadas
 
-### 4.1. Controles Técnicos
+Todas as medidas descritas nesse capítulo se referem caso a solução fosse de fato implementada para fins comerciais, dado a natureza acadêmica do projeto, tais medidas não foram de fato implementadas.
 
-- **Criptografia:** Todos os dados em repouso nos Banco de Dados AWS Aurora MySQL e Mongo Atlas se encontram criptografados usando algoritmos de criptografia simétrica do tipo AES-256.
+### 5.1. Controles Técnicos
 
-- **Rotação de Chaves:** As chaves criptográficas utilizada para criptografar os bancos são rotacionadas periodicamente, conforme sugere-se as boas práticas de cyberseguança. As chaves sempre são geradas, destruídas e rotacionadas sempre em ambiente seguro através do serviço Key Management Service da AWS. As chaves nunca devem sair do ambiente seguro mencionado.
+
+- **Criptografia:** Todos os dados em repouso nos Banco de Dados AWS Aurora MySQL e Mongo Atlas se encontram criptografados usando algoritmos de criptografia simétrica do tipo AES-256, onde as master keys estariam salvas em Vaults em no mínimo dois provedores de Nuvens Independentes.
+
+- **Rotação de Chaves:** As session keys utilizada para criptografar os bancos são rotacionadas periodicamente, conforme sugere-se as boas práticas de cybersegurança. As chaves sempre são geradas, destruídas e rotacionadas sempre em ambiente seguro através do serviço Key Management Service da AWS. As chaves nunca saem do ambiente seguro mencionado.
 
 - **Autenticação e Autorização:** O acesso aos diversos serviços do sistema é controlado por autenticação JWT, provido pelo serviço IAM Cognito da AWS. Somente usuários devidamente cadastrados e autorizados devem ter acesso aos recursos do sistema. Ainda é possível garantir acesso granular de acordo com diferentes grupos de usuários (Clientes e Administradores).
 
 - **Segurança na Comunicação:** Toda comunicação entre cliente e servidor é feita via HTTPS. Tráfegos internos ocorrem através de VPC devidamente isoladas e protegidas.
 
-### 4.2. Controles Administrativos
+### 5.2. Controles Administrativos
 
 - **Política de Retenção de Dados:** Os dados são armazenados no momento do cadastro do cliente até um eventual pedido de descadastro. Dados referentes aos pedidos continuam existindo na base de dados mesmo após o descadastro do cliente.
 
 - **Treinamento e Conscientização:** Os membros da equipe foram treinados sobre as boas práticas de proteção de dados e conformidade com a LGPD.
 
-## 5. Avaliação de Conformidade com a LGPD
+## 6. Avaliação de Conformidade com a LGPD
 
-### 5.1. Princípios da LGPD
+### 6.1. Princípios da LGPD
 
 - **Finalidade:** O sistema respeita o princípio da finalidade ao coletar e processar dados pessoais exclusivamente para os fins claramente definidos e informados aos titulares sem qualquer uso posterior para fins incompatíveis.
 
@@ -111,9 +142,9 @@ Os únicos dados pessoais tratados pelo sistema são os dados relativos ao Nome,
 
 - **Responsabilização:** O sistema adota medidas para demonstrar a responsabilidade pelo tratamento dos dados, conforme exigido pela LGPD. Isso inclui a documentação detalhada dos processos de tratamento de dados, a realização de auditorias internas regulares e o compromisso com a conformidade contínua com as normas de proteção de dados. Os membros da equipe são treinados para compreender suas responsabilidades em relação à proteção de dados, e há um plano de resposta a incidentes de segurança.
 
-## 6. Plano de Ação para Mitigação de Riscos
+## 7. Plano de Ação para Mitigação de Riscos
 
-### 6.1. Ações Corretivas
+### 7.1. Ações Corretivas
 
 - **Implementação de Logs de Acesso:** Mecanismos de Monitoramento de acesso aos dados são empregados para detecção de acessos não-autorizados.
 
@@ -126,10 +157,10 @@ Os únicos dados pessoais tratados pelo sistema são os dados relativos ao Nome,
 - **Revisão da Política de Segurança:** Atualizações da Política de Segurança deverão acompanhar sempre que novas diretrizes e orientações sejam lançadas na esfera legislativa.
 
 
-## 7. Conclusão
+## 8. Conclusão
 
-### 7.1. Considerações Finais
+### 8.1. Considerações Finais
 
 Por fim com esse relatório, firmamos o compromisso dos desenvolvedores desse sistema para com todos os clientes usuários do mesmo em relação a segurança e transparência do uso de dados realizado pelo mesmo seguindo todas as diretrizes orientadoras da Lei de Proteção de Dados Geral (LGPD).
 
-### 7.2. Assinatura e Data
+### 8.2. Assinatura e Data
