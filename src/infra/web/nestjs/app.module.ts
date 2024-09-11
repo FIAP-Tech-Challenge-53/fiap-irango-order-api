@@ -14,11 +14,13 @@ import AppController from '@/infra/web/nestjs/app.controller'
 import ConsumidoresModule from '@/infra/web/nestjs/consumidores/consumidores.module'
 import PedidosModule from '@/infra/web/nestjs/pedidos/pedidos.module'
 import ProdutosModule from '@/infra/web/nestjs/produtos/produtos.module'
+import ExclusionRequestModule from '@/infra/web/nestjs/user-data-exclusion/user-data-exclusion.module'
 
 export const appModules = [
   ConsumidoresModule,
   ProdutosModule,
-  PedidosModule
+  PedidosModule,
+  ExclusionRequestModule
 ]
 
 // AWS.config.update({

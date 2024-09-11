@@ -11,3 +11,5 @@ tsconfig.ts
 jest.config.js
 jest.config.unit.js
 jest.config.integration.js
+/src/infra/persistence/typeorm/migrations/*
+/test/**
