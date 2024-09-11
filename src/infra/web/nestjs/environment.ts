@@ -101,6 +101,6 @@ export class Environment {
   }
 
   static get URL_QUEUE() {
-    return process.env.URL_QUEUE || 'http://localhost:4566/000000000000/'
+    return process.env.URL_QUEUE || 'http://localstack:4566/000000000000/'
   }
 }
