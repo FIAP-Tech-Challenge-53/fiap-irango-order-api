@@ -9,6 +9,8 @@ export default class CreatePayment {
   ) {}
 
   async handle (id: number, pagamentoId: string): Promise<Pedido> {
+    console.log(`Creating Payment with ID '${pagamentoId}' for Order with ID ${id}`)
+
     let pedido = await this.gateway.findById(id)
 
     if (!pedido) {

@@ -22,13 +22,12 @@ RUN dpkg-reconfigure -f noninteractive tzdata
 #  - - - - - - - - - - This quick hack invalidates the cache - - - - - - - - - - 
 ADD https://www.google.com /time.now
 
-RUN npm install -g pnpm
 # Install
 COPY ./package*.json ./
-RUN pnpm install
+RUN npm ci --include=dev --ignore-scripts
 
 # Build the application
 COPY ./ ./
-RUN pnpm build
+RUN npm run build
 
-ENTRYPOINT [ "pnpm", "start:dev" ]
+ENTRYPOINT [ "npm", "run", "start:dev" ]

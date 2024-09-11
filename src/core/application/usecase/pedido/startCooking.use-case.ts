@@ -9,6 +9,8 @@ export default class StartCooking {
   ) {}
 
   async handle (id: number): Promise<Pedido> {
+    console.log(`Starting Cooking for Order with ID ${id}`)
+
     const pedido = await this.gateway.findById(id)
 
     if (!pedido) {

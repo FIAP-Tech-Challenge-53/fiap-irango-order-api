@@ -18,7 +18,7 @@ export class CreatedPaymentHandler {
     const input: any = JSON.parse(obj.Message ?? '')
     const controller = this.pedidoControllerFactory.get()
 
-    await controller.createPayment(input.id, input.pagamentoId)
+    await controller.createPayment(input.pedidoId, input.id)
   }
 
   @SqsConsumerEventHandler(/** name: */ Environment.CREATED_PAYMENT_QUEUE, /** eventName: */ 'processing_error')

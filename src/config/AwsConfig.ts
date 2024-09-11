@@ -1,5 +1,13 @@
-
 import { Environment as envs } from '@/infra/web/nestjs/environment'
+
+interface AwsConfig {
+  region: string
+  endpoint?: string
+  credentials: {
+    accessKeyId: string
+    secretAccessKey: string
+  }
+}
 
 const localConfig = {
   region: envs.AWS_REGION,
@@ -18,4 +26,4 @@ const cloudConfig = {
   }
 }
 
-export default envs.IS_DEV_ENV ? localConfig : cloudConfig
+export default (envs.IS_DEV_ENV ? localConfig : cloudConfig) as AwsConfig

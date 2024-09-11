@@ -9,6 +9,8 @@ export default class ConfirmPayment {
   ) {}
 
   async handle (id: number): Promise<Pedido> {
+    console.log(`Confirming Order with ID ${id}`)
+
     let pedido = await this.gateway.findById(id)
 
     if (!pedido) {
