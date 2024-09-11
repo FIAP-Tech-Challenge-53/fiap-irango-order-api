@@ -3,13 +3,13 @@ import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
 import BusinessException from '@/core/domain/errors/business-exception'
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
 
-export default class ConfirmPayment {
+export default class CreatePayment {
   constructor (
     private readonly gateway: PedidoGateway,
   ) {}
 
-  async handle (id: number): Promise<Pedido> {
-    console.log(`Confirming Order with ID ${id}`)
+  async handle (id: number, pagamentoId: string): Promise<Pedido> {
+    console.log(`Creating Payment with ID '${pagamentoId}' for Order with ID ${id}`)
 
     let pedido = await this.gateway.findById(id)
 
@@ -21,7 +21,7 @@ export default class ConfirmPayment {
       throw new BusinessException('Pedido não está com pagamento pendente')
     }
 
-    pedido.update({ status: PedidoStatusEnum.RECEBIDO })
+    pedido.update({ pagamentoId, status: pedido.status })
 
     pedido = await this.gateway.save(pedido)
 

@@ -21,7 +21,6 @@ import { CookGateway } from '@/core/operation/gateway/cook.gateway'
 import { PaymentGateway } from '@/core/operation/gateway/payment.gateway'
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
 import { ProdutoGateway } from '@/core/operation/gateway/produto.gateway'
-import IRangoCookService from '@/infra/persistence/service/irango-cook.service'
 import CreatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/create-pedido.request'
 import UpdatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/update-pedido.request'
 
@@ -32,7 +31,6 @@ describe('Test for PedidoController Class', () => {
   let mockConsumidorRepository:jest.Mocked<IConsumidorRepository>
   let mockProdutoRepository:jest.Mocked<IProdutoRepository>
   let mockPaymentService:jest.Mocked<IPaymentService>
-  let mockCookService:jest.Mocked<IRangoCookService>
 
   let mockPedidoGatewayCreate:jest.Mock<any>
   let mockPedidoGatewayfindById:jest.Mock<any>
@@ -162,10 +160,6 @@ describe('Test for PedidoController Class', () => {
       registerOrder: jest.fn()
     }
 
-    mockCookService = {
-      registerOrder: jest.fn()
-    }
-
     mockProdutoRepository = {
       create: jest.fn(),
       findById: jest.fn(),
@@ -179,7 +173,6 @@ describe('Test for PedidoController Class', () => {
       mockConsumidorRepository,
       mockProdutoRepository,
       mockPaymentService,
-      mockCookService
     )
   })
 

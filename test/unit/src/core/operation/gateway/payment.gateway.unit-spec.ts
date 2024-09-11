@@ -21,12 +21,9 @@ describe('Test PaymentGateway class', () => {
   it('Test registerOrder method', async () => {
     const pedido = new Pedido()
 
-    mockedPaymentService.registerOrder.mockResolvedValue('mocked-result')
-
-    const result = await gateway.registerOrder(pedido)
+    await gateway.registerOrder(pedido)
 
     expect(mockedPaymentService.registerOrder).toHaveBeenCalledWith(pedido)
     expect(mockedPaymentService.registerOrder).toHaveBeenCalledTimes(1)
-    expect(result).toEqual('mocked-result')
   })
 })

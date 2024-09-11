@@ -1,7 +1,7 @@
 
 export interface ItemPedidoCreateDto {
   readonly produtoId: string;
-  readonly ingredientesRemovidos: string[];
+  readonly ingredientesRemovidos?: string[];
 }
 
 export default interface PedidoCreateDto {

@@ -4,43 +4,30 @@ import Pedido from '@/core/domain/entities/pedido'
 import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
 import BusinessException from '@/core/domain/errors/business-exception'
 import IPedidoRepository from '@/core/domain/repositories/ipedido.repository'
-import ICookService from '@/core/domain/services/icook.service'
-import { CookGateway } from '@/core/operation/gateway/cook.gateway'
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
 
 describe('ConfirmPayment Class Tests', () => {
   let mockPedidoGateway:PedidoGateway
-  let mockCookGateway:CookGateway
   let useCase:ConfirmPayment
   let mockPedidoRepository:jest.Mocked<IPedidoRepository>
-  let mockCookService:jest.Mocked<ICookService>
 
   let mockCreate:jest.Mock<any>
   let mockfindById:jest.Mock<any>
   let mockList:jest.Mock<any>
   let mocksave:jest.Mock<any>
-  let mockRegisterOrder:jest.Mock<any>
 
   beforeEach(() => {
-    jest.mock('@/core/operation/gateway/cook.gateway')
     jest.mock('@/core/operation/gateway/pedido.gateway')
 
     mockCreate = jest.fn()
     mockfindById = jest.fn()
     mockList = jest.fn()
     mocksave = jest.fn()
-    mockRegisterOrder = jest.fn()
 
     PedidoGateway.prototype.create = mockCreate
     PedidoGateway.prototype.findById = mockfindById
     PedidoGateway.prototype.list = mockList
     PedidoGateway.prototype.save = mocksave
-
-    CookGateway.prototype.registerOrder = mockRegisterOrder
-
-    mockCookService = {
-      registerOrder: jest.fn()
-    }
 
     mockPedidoRepository = {
       find: jest.fn(),
@@ -50,8 +37,7 @@ describe('ConfirmPayment Class Tests', () => {
     }
 
     mockPedidoGateway = new PedidoGateway(mockPedidoRepository)
-    mockCookGateway = new CookGateway(mockCookService)
-    useCase = new ConfirmPayment(mockPedidoGateway, mockCookGateway)
+    useCase = new ConfirmPayment(mockPedidoGateway)
   })
 
   it('constructor class test', async () => {

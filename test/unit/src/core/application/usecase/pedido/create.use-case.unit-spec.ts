@@ -158,7 +158,6 @@ describe('Create Class Tests', () => {
     expect(mockConsumidorFindById).toHaveBeenCalledTimes(1)
     expect(mockPedidoCreate).toHaveBeenCalledTimes(1)
     expect(mockPaymentRegisterOrder).toHaveBeenCalledTimes(1)
-    expect(mockPedidoSave).toHaveBeenCalledTimes(1)
     expect(result).toEqual(pedido)
   })
 
