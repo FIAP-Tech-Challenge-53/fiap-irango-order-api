@@ -50,8 +50,8 @@ async function bootstrap () {
 
   app.use(bodyParser.json({ limit: '5mb' }))
   app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }))
-  app.enableCors({ 
-    origin: [`${envs.SENTRY_DSN}`,`${envs.SERVICE_IRANGO_COOK_API}`,`${envs.SERVICE_IRANGO_PAYMENT_API}`],
+  app.enableCors({
+    origin: [`${envs.SENTRY_DSN}`],
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true
