@@ -2,18 +2,18 @@ import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager'
 import { Global, Inject, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
+import { SqsModule } from '@ssut/nestjs-sqs'
 import { Cache } from 'cache-manager'
 import * as redisStore from 'cache-manager-redis-store'
 
+import QueueConfig from '@/config/QueueConfig'
 import RedisConfig from '@/config/RedisConfig'
 import TypeOrmConfig from '@/config/typeorm/TypeOrmConfig'
-import QueueConfig from '@/config/QueueConfig'
 import AppCache from '@/core/helpers/AppCache'
 import AppController from '@/infra/web/nestjs/app.controller'
 import ConsumidoresModule from '@/infra/web/nestjs/consumidores/consumidores.module'
 import PedidosModule from '@/infra/web/nestjs/pedidos/pedidos.module'
 import ProdutosModule from '@/infra/web/nestjs/produtos/produtos.module'
-import { SqsModule } from '@ssut/nestjs-sqs'
 
 export const appModules = [
   ConsumidoresModule,
@@ -49,10 +49,10 @@ export const appModules = [
   ]
 })
 export default class AppModule {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache
+  constructor (@Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
-  async onApplicationShutdown() {
+  async onApplicationShutdown () {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (this.cacheManager as any).store.getClient().quit()
   }

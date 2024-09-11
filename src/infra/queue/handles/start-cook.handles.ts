@@ -1,19 +1,21 @@
-import { Environment } from '@/infra/web/nestjs/environment';
-import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedido.controller.factory';
-import { Message } from '@aws-sdk/client-sqs';
-import { Injectable } from '@nestjs/common';
-import { SqsConsumerEventHandler, SqsMessageHandler } from '@ssut/nestjs-sqs';
+import { Injectable } from '@nestjs/common'
+
+import { Message } from '@aws-sdk/client-sqs'
+import { SqsConsumerEventHandler, SqsMessageHandler } from '@ssut/nestjs-sqs'
+
+import { Environment } from '@/infra/web/nestjs/environment'
+import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedido.controller.factory'
 
 @Injectable()
 export class StartCookHandler {
-  constructor(
+  constructor (
     private readonly pedidoControllerFactory: PedidoControllerFactory,
   ) { }
 
   @SqsMessageHandler(/** name: */ Environment.START_COOK_QUEUE, /** batch: */ false)
-  public async handleMessage(message: Message) {
-    const obj: any = JSON.parse(message.Body ?? '');
-    const input: any = JSON.parse(obj.Message ?? '');
+  public async handleMessage (message: Message) {
+    const obj: any = JSON.parse(message.Body ?? '')
+    const input: any = JSON.parse(obj.Message ?? '')
 
     const controller = this.pedidoControllerFactory.get()
 
@@ -21,8 +23,7 @@ export class StartCookHandler {
   }
 
   @SqsConsumerEventHandler(/** name: */ Environment.START_COOK_QUEUE, /** eventName: */ 'processing_error')
-  public onProcessingError(error: Error, message: Message) {
-
+  public onProcessingError (error: Error, message: Message) {
     console.log(error, message)
     // report errors here
   }

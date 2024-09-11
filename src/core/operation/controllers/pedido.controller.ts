@@ -12,10 +12,8 @@ import IConsumidorRepository from '@/core/domain/repositories/iconsumidor.reposi
 import IPedidoRepository from '@/core/domain/repositories/ipedido.repository'
 import IProdutoRepository from '@/core/domain/repositories/iproduto.repository'
 import IPaymentService from '@/core/domain/services/ipayment.service'
-
 import { ConsumidorGateway } from '@/core/operation/gateway/consumidor.gateway'
 import { PaymentGateway } from '@/core/operation/gateway/payment.gateway'
-
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
 import { ProdutoGateway } from '@/core/operation/gateway/produto.gateway'
 import CreatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/create-pedido.request'
@@ -72,7 +70,7 @@ export class PedidoController {
     return PedidoMapper.toDto(pedido)
   }
 
-  async createPayment(
+  async createPayment (
     id: number,
     pagamentoId: string,
   ): Promise<PedidoDto> {

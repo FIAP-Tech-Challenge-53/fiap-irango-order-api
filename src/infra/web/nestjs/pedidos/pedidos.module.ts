@@ -7,14 +7,14 @@ import IRangoPaymentService from '@/infra/persistence/service/irango-payment.ser
 import { ItemPedido } from '@/infra/persistence/typeorm/entities/item-pedido'
 import { Pedido } from '@/infra/persistence/typeorm/entities/pedido'
 import PedidoTypeormRepository from '@/infra/persistence/typeorm/repository/pedido-typeorm.repository'
-import ConsumidoresModule from '@/infra/web/nestjs/consumidores/consumidores.module'
-import PedidosController from '@/infra/web/nestjs/pedidos/pedidos.controller'
-import ProdutosModule from '@/infra/web/nestjs/produtos/produtos.module'
-import { StartCookHandler } from '@/infra/queue/handles/start-cook.handles'
-import { FinishCookHandler } from '@/infra/queue/handles/finish-cook.handles'
 import { ConfirmPaymentHandler } from '@/infra/queue/handles/confirm-payment.handles'
 import { CreatedPaymentHandler } from '@/infra/queue/handles/created-payment.handles'
+import { FinishCookHandler } from '@/infra/queue/handles/finish-cook.handles'
+import { StartCookHandler } from '@/infra/queue/handles/start-cook.handles'
+import ConsumidoresModule from '@/infra/web/nestjs/consumidores/consumidores.module'
 import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedido.controller.factory'
+import PedidosController from '@/infra/web/nestjs/pedidos/pedidos.controller'
+import ProdutosModule from '@/infra/web/nestjs/produtos/produtos.module'
 
 @Module({
   imports: [

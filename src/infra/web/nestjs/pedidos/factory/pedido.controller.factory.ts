@@ -1,6 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
-
-import { PedidoController } from '@/core/operation/controllers/pedido.controller';
+import { Inject, Injectable } from '@nestjs/common'
 
 import IConsumidorRepository, {
   IConsumidorRepository as IConsumidorRepositorySymbol,
@@ -14,10 +12,11 @@ import IProdutoRepository, {
 import IPaymentService, {
   IPaymentService as IPaymentServiceSymbol,
 } from '@/core/domain/services/ipayment.service'
+import { PedidoController } from '@/core/operation/controllers/pedido.controller'
 
 @Injectable()
 export class PedidoControllerFactory {
-  constructor(
+  constructor (
     @Inject(IPedidoRepositorySymbol) private readonly repository: IPedidoRepository,
     @Inject(IConsumidorRepositorySymbol) private readonly consumidorRepository: IConsumidorRepository,
     @Inject(IProdutoRepositorySymbol) private readonly produtoRepository: IProdutoRepository,
@@ -26,7 +25,7 @@ export class PedidoControllerFactory {
 
   }
 
-  public get() {
+  public get () {
     return new PedidoController(
       this.repository,
       this.consumidorRepository,
@@ -34,5 +33,4 @@ export class PedidoControllerFactory {
       this.paymentService,
     )
   }
-
 }

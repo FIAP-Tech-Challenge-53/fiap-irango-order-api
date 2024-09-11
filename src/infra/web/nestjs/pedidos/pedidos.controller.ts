@@ -12,9 +12,9 @@ import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, Api
 
 import PedidoResponse from '@/infra/web/nestjs/pedidos/dto/pedido.response'
 import UpdatePedidoRequest from '@/infra/web/nestjs/pedidos/dto/update-pedido.request'
+import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedido.controller.factory'
 
 import CreatePedidoRequest from './dto/create-pedido.request'
-import { PedidoControllerFactory } from '@/infra/web/nestjs/pedidos/factory/pedido.controller.factory'
 
 @Controller('v1/pedidos')
 @ApiTags('v1/pedidos')
@@ -26,7 +26,7 @@ export default class PedidosController {
   @Get()
   @ApiOperation({ summary: 'Listar todos os Pedidos' })
   @ApiOkResponse({ description: 'Todos os Pedidos', type: [PedidoResponse], isArray: true })
-  list(): Promise<PedidoResponse[]> {
+  list (): Promise<PedidoResponse[]> {
     const controller = this.pedidoControllerFactory.get()
 
     return controller.list()
