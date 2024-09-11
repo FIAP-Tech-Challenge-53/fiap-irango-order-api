@@ -127,6 +127,19 @@ npm run test:bdd:local
 <img src="./docs/test_suite.png" alt="Test Suite Coverage" width="900" />
 
 
+## OWasp Scan Reports
+
+### Realizar Pedido Vulnerabilities Report
+- [Not Sanatized](https://fiap-tech-challenge-53.github.io/fiap-irango-order-api/owasp-reports/vulnerabilities/realizar-pedido/2024-08-17-ZAP-Report-.html)
+
+- [Sanatized](https://fiap-tech-challenge-53.github.io/fiap-irango-order-api/owasp-reports/sanatized/realizar-pedido/2024-08-17-ZAP-Report-.html)
+
+### Listar Cardapio Vulnerabilities Report
+
+- [Not Sanatized](https://fiap-tech-challenge-53.github.io/fiap-irango-order-api/owasp-reports/vulnerabilities/listar-cardapio/2024-08-16-ZAP-Report-.html)
+
+- [Sanatized with False Positive](https://fiap-tech-challenge-53.github.io/fiap-irango-order-api/owasp-reports/sanatized/listar-cardapio/2024-08-17-ZAP-Report-.html)
+
 ## Make commands
 ### Using Docker
 - Setup Project: `make setup`. This command will create docker network, containers and volumes. It will also start the project and show its logs.

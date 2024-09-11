@@ -50,7 +50,12 @@ async function bootstrap () {
 
   app.use(bodyParser.json({ limit: '5mb' }))
   app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }))
-  app.enableCors({ optionsSuccessStatus: 200 })
+  app.enableCors({
+    origin: [`${envs.SENTRY_DSN}`],
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+    credentials: true
+  })
   app.enableShutdownHooks()
   app.useGlobalInterceptors(new ResponseTransformInterceptor())
   app.useGlobalFilters(new AllExceptionFilter())
