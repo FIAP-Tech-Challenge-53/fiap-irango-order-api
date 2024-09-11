@@ -40,6 +40,7 @@ export default class Pedido {
 
   update (input: PedidoUpdateDto) {
     this.status = input.status
+    this.pagamentoId = input.pagamentoId
   }
 
   recebido () {

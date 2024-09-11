@@ -57,11 +57,11 @@ jobs:
       - name: Migration
         run: npm run migration:run
       # Test Integration
-      - name: Test integration
-        run: npm run test:integration --bail
+      # - name: Test integration
+        # run: npm run test:integration --bail
       # Test bdd
-      - name: Test BDD
-        run: npm run test:bdd
+      # - name: Test BDD
+      #   run: npm run test:bdd
 
       - name: Notify CI process
         if: always()

@@ -2,9 +2,11 @@ import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager'
 import { Global, Inject, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
+import { SqsModule } from '@ssut/nestjs-sqs'
 import { Cache } from 'cache-manager'
 import * as redisStore from 'cache-manager-redis-store'
 
+import QueueConfig from '@/config/QueueConfig'
 import RedisConfig from '@/config/RedisConfig'
 import TypeOrmConfig from '@/config/typeorm/TypeOrmConfig'
 import AppCache from '@/core/helpers/AppCache'
@@ -19,6 +21,12 @@ export const appModules = [
   PedidosModule
 ]
 
+// AWS.config.update({
+//   region: config.AWS_REGION,
+//   accessKeyId: config.ACCESS_KEY_ID,
+//   secretAccessKey: config.SECRET_ACCESS_KEY,
+// });
+
 @Global()
 @Module({
   imports: [
@@ -27,7 +35,7 @@ export const appModules = [
       store: redisStore,
       ...RedisConfig
     }),
-
+    SqsModule.register(QueueConfig),
     ...appModules
   ],
   controllers: [

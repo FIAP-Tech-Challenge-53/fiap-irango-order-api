@@ -34,10 +34,8 @@ export default class Create {
 
     pedido = await this.gateway.create(pedido)
 
-    const pagamentoId = await this.paymentGateway.registerOrder(pedido)
-    pedido.pagamentoId = pagamentoId
+    await this.paymentGateway.registerOrder(pedido)
 
-    await this.gateway.save(pedido)
     return pedido
   }
 
@@ -47,7 +45,7 @@ export default class Create {
       if (!produto) {
         throw new BusinessException('Produto não encontrado')
       }
-      const ingredientes = item.ingredientesRemovidos.filter((ingredienteId) => produto.ingredientes.some((ingrediente) => ingrediente.id === ingredienteId))
+      const ingredientes = item.ingredientesRemovidos?.filter((ingredienteId) => produto.ingredientes.some((ingrediente) => ingrediente.id === ingredienteId)) || []
       const ingredientesRemovidos = ingredientes.map((ingredienteId) => new Ingrediente({ id: ingredienteId }))
 
       return ItemPedido.create(

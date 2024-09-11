@@ -68,13 +68,39 @@ export class Environment {
     return process.env.CACHE_ENABLED === 'true'
   }
 
-  // SERVICE_IRANGO_PAYMENT_API="http://127.0.0.1:3002"
-  static get SERVICE_IRANGO_PAYMENT_API () {
-    return process.env.SERVICE_IRANGO_PAYMENT_API || 'http://localhost:3002'
+  static get AWS_REGION () {
+    return process.env.AWS_REGION || 'us-east-1'
   }
 
-  // SERVICE_IRANGO_COOK_API="http://127.0.0.1:3003"
-  static get SERVICE_IRANGO_COOK_API () {
-    return process.env.SERVICE_IRANGO_COOK_API || 'http://localhost:3003'
+  static get AWS_ACCESS_KEY_ID () {
+    return process.env.AWS_ACCESS_KEY_ID || 'qualquercoisa'
+  }
+
+  static get AWS_SECRET_ACCESS_KEY () {
+    return process.env.AWS_SECRET_ACCESS_KEY || 'qualquercoisa'
+  }
+
+  static get SNS_TOPIC_ORDER_CREATED () {
+    return process.env.SNS_TOPIC_ORDER_CREATED || 'arn:aws:sns:us-east-1:000000000000:fiap-irango-order_order-created_dev'
+  }
+
+  static get START_COOK_QUEUE () {
+    return process.env.START_COOK_QUEUE || 'fiap-irango-order_cooking-started_dev'
+  }
+
+  static get FINISH_COOK_QUEUE () {
+    return process.env.START_FINISH_QUEUE || 'fiap-irango-order_cooking-finished_dev'
+  }
+
+  static get CONFIRM_PAYMENT_QUEUE () {
+    return process.env.CONFIRM_PAYMENT_QUEUE || 'fiap-irango-order_payment-confirmed_dev'
+  }
+
+  static get CREATED_PAYMENT_QUEUE () {
+    return process.env.CREATED_PAYMENT_QUEUE || 'fiap-irango-order_payment-created_dev'
+  }
+
+  static get URL_QUEUE () {
+    return process.env.URL_QUEUE || 'http://localstack:4566/000000000000/'
   }
 }
