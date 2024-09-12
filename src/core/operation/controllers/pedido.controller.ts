@@ -53,6 +53,7 @@ export class PedidoController {
      id: number,
     input: UpdatePedidoRequest
   ): Promise<PedidoDto> {
+    console.log(`Updating Pedidto with id ${id} and status ${input.status}`)
     const useCase = new Update(new PedidoGateway(this.repository))
 
     const pedido = await useCase.handle(id, input)
