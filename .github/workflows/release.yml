@@ -75,7 +75,7 @@ jobs:
           IMAGE_URI_LATEST: ${{ steps.login_ecr.outputs.registry }}/${{ steps.image_name.outputs.latest }}
         uses: indiesdev/curl@v1.1
         with:
-          url: https://api.github.com/repos/${{ github.repository_owner }}/fiap-irango-k8s/actions/workflows/release-api.yml/dispatches
+          url: https://api.github.com/repos/${{ github.repository_owner }}/fiap-irango-k8s/actions/workflows/release-order.yml/dispatches
           method: POST
           headers: '{"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"}'
           bearer-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
